@@ -1,0 +1,11 @@
+Patchnotes
+**********
+
+Version 0.11
++ Reworked interface
++ Removed scheme configuration
+
+Version 0.2
++ Tabbing
++ Communicating with more than one person.
++ Certificate question

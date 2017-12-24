@@ -1,0 +1,28 @@
+Config Engine
+Log Engine
+
+0.11 Rework the interface a bit
+0.2 Tabbing and communicating with more than 1 partner
+0.3 Friend rooster
+0.4 Secure Chat
+0.5 SQLite Support / Server Favorites
+0.6 Localisation
+0.7 Chat Logs
+0.8 Account Management (Create an account on servers and change passwords)
+0.81 Options dialog
+0.9 Chat Room Support
+<-> Bugfixing and polishing
+1.0 First full version
+1.1 Privacy Lists
+
+Emojis
+User Profiles and Avatars
+Color Setting and Font face settings
+File Transfer
+Animated Texts
+Modding
+
+Polishing:
+Timestamp
+Option for Pressing enter to send a message
+Retry of failed messages
