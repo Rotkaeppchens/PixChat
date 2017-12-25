@@ -8,6 +8,8 @@
 
 #include "gnf.h"
 
+extern gloox::Client* gMainChatClient;
+
 void FriendRoster::handleItemAdded(const gloox::JID &jid)
 {
     L_INFO("friendroster", "Friendroster Item added");
@@ -67,6 +69,10 @@ bool FriendRoster::handleSubscriptionRequest(const gloox::JID &Jid, const std::s
     L_DEBUG("friendroster", "Display message: " + DisplayMessage);
 
     bool UserResult = InterfaceCreateAskForm(DisplayMessage, true);
+
+    if (UserResult) {
+        gMainChatClient->rosterManager()->subscribe(Jid);
+    }
 
     return UserResult;
 }

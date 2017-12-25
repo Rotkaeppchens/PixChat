@@ -18,7 +18,7 @@
  * @def PROJECT_VERSION_NR
  * @brief The version number of the project
  */
-#define PROJECT_VERSION_NR "0.3 alpha"
+#define PROJECT_VERSION_NR "0.31 alpha"
 
 /**
  * @def CONFIG_FILE_NAME
