@@ -207,8 +207,20 @@ UserId FormatRosterItemToUserId(gloox::RosterItem* Item)
  */
 void GnfAddFriendToRoster(const std::string &Id)
 {
-    L_DEBUG("gnf", "Adding friend to roster: " + Id);
-    gMainChatClient->rosterManager()->subscribe(Id);
+    //~ L_DEBUG("gnf", "Adding friend to roster: " + Id);
+
+    std::string FullId(Id);
+
+    if (Id.find("@") == std::string::npos) {
+        FullId += "@" + ReadConfigString("client.account.host");
+    }
+
+    gloox::JID Jid(FullId);
+
+    L_DEBUG("gnf", "Trying to subscribe: " + FullId);
+
+    gMainChatClient->rosterManager()->subscribe(Jid);
+    gMainChatClient->rosterManager()->synchronize();
 }
 
 /**

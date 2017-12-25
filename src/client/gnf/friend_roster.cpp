@@ -78,7 +78,7 @@ bool FriendRoster::handleUnsubscriptionRequest(const gloox::JID &Jid, const std:
     std::string DisplayMessage;
 
     DisplayMessage = Jid.bare();
-    DisplayMessage += " doesn't want to be your friend anymore.\n\n";
+    DisplayMessage += " remmoved you from his/her friendlist. Do you want to remove him/her?\n\n";
     DisplayMessage += Msg;
 
     L_DEBUG("friendroster", "Display message: " + DisplayMessage);
