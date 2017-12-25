@@ -135,7 +135,7 @@ int InterfaceInit()
     Fl_Window* MainWindow = new Fl_Window(800, 560, WindowTitle.c_str());
     //~ MainWindow->resizable(MainWindow);
 
-    Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("icon.png");
+    Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("../res/icon.png");
     MainWindow->icon(MainWindowIcon);
 
 
