@@ -138,6 +138,8 @@ int InterfaceInit()
     Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("../res/icon.png");
     MainWindow->icon(MainWindowIcon);
 
+    L_DEBUG("interface", "Setting message window hotspot.");
+    fl_message_hotspot(0);
 
     L_DEBUG("interface", "Creating menu bar...");
     Fl_Menu_Item MenuItems[] = {
