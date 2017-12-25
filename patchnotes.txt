@@ -9,3 +9,6 @@ Version 0.2
 + Tabbing
 + Communicating with more than one person.
 + Certificate question
+
+Version 0.3
++ Added Friendlist
