@@ -213,10 +213,18 @@ void InterfaceSetInfoMsg(const std::string &Message)
  * @brief Creates a popup in which the user can answer a question
  *
  * @param Message The message the user gets to see
+ * @param If the at sign should be escaped.
  * @return bool The answer
  */
-bool InterfaceCreateAskForm(const std::string &Message)
+bool InterfaceCreateAskForm(std::string Message, bool ReplaceAtSign)
 {
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
     int UserAnswer;
     UserAnswer = fl_choice(Message.c_str(), "Yes", "No", 0);
 
@@ -231,10 +239,18 @@ bool InterfaceCreateAskForm(const std::string &Message)
  * @brief Displays a popup with an error message
  *
  * @param Message The Message to display
+ * @param If the at sign should be escaped.
  * @return void
  */
-void InterfaceDisplayErrorForm(const std::string &Message)
+void InterfaceDisplayErrorForm(std::string Message, bool ReplaceAtSign)
 {
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
     fl_alert(Message.c_str());
 }
 
@@ -242,10 +258,18 @@ void InterfaceDisplayErrorForm(const std::string &Message)
  * @brief Display a popup with a message form
  *
  * @param Message the message to display
+ * @param If the at sign should be escaped.
  * @return void
  */
-void InterfaceDisplayInfoForm(const std::string &Message)
+void InterfaceDisplayInfoForm(std::string Message, bool ReplaceAtSign)
 {
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
     fl_message(Message.c_str());
 }
 

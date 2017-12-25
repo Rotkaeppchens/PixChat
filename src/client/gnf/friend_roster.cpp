@@ -60,11 +60,13 @@ bool FriendRoster::handleSubscriptionRequest(const gloox::JID &Jid, const std::s
 
     std::string DisplayMessage;
 
-    DisplayMessage += Jid.bare();
+    DisplayMessage = Jid.bare();
     DisplayMessage += " wants to be your friend.\n\n";
     DisplayMessage += Msg;
 
-    bool UserResult = InterfaceCreateAskForm(DisplayMessage);
+    L_DEBUG("friendroster", "Display message: " + DisplayMessage);
+
+    bool UserResult = InterfaceCreateAskForm(DisplayMessage, true);
 
     return UserResult;
 }
@@ -75,11 +77,13 @@ bool FriendRoster::handleUnsubscriptionRequest(const gloox::JID &Jid, const std:
 
     std::string DisplayMessage;
 
-    DisplayMessage += Jid.bare();
+    DisplayMessage = Jid.bare();
     DisplayMessage += " doesn't want to be your friend anymore.\n\n";
     DisplayMessage += Msg;
 
-    bool UserResult = InterfaceCreateAskForm(DisplayMessage);
+    L_DEBUG("friendroster", "Display message: " + DisplayMessage);
+
+    bool UserResult = InterfaceCreateAskForm(DisplayMessage, true);
 
     return UserResult;
 }

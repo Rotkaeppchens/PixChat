@@ -134,7 +134,7 @@ void DeleteFriendCallback(Fl_Widget* Widget, void* Data)
 
     L_INFO("interface", "Asking user to remove friend: " + (*Username));
 
-    if (InterfaceCreateAskForm("Do you really want to unfriend: " + (*Username))) {
+    if (InterfaceCreateAskForm("Do you really want to unfriend: " + (*Username), true)) {
         L_INFO("interface", "Removing friend: " + (*Username));
         GnfRemoveFriendFromRoster(*Username);
     } else {
