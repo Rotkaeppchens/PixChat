@@ -28,6 +28,8 @@ class UserId
 void GnfInitChatUser();
 bool GnfUpdate(int Timeout = -1);
 
+bool GnfIsConnected();
+
 void GnfSendMessage(const std::string &To, const std::string &Message);
 
 std::vector<UserId> GnfGetFullFriendRoster();

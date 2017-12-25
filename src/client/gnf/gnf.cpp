@@ -74,6 +74,20 @@ bool GnfUpdate(int Timeout)
     return true;
 }
 
+/**
+ * @brief Returns if the client is currently connected
+ *
+ * @return bool The connection status
+ */
+bool GnfIsConnected()
+{
+    if (gMainChatClient == nullptr) {
+        return false;
+    }
+
+    return true;
+}
+
 void GnfSendMessage(const std::string &To, const std::string &Message)
 {
     gloox::JID Recipient(To + "@" + ReadConfigString("client.account.host"));
@@ -209,4 +223,5 @@ void GnfRemoveFriendFromRoster(const std::string &Id)
 
     gloox::JID Jid(Id);
     gMainChatClient->rosterManager()->remove(Jid);
+    gMainChatClient->rosterManager()->synchronize();
 }

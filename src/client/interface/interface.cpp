@@ -239,6 +239,17 @@ void InterfaceDisplayErrorForm(const std::string &Message)
 }
 
 /**
+ * @brief Display a popup with a message form
+ *
+ * @param Message the message to display
+ * @return void
+ */
+void InterfaceDisplayInfoForm(const std::string &Message)
+{
+    fl_info(Message.c_str());
+}
+
+/**
  * @brief This function displays a chat message and creates the display tab
  *
  * @param Text The text to display

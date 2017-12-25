@@ -112,7 +112,7 @@ std::string TranslateCertStatus(const int &StatusBitmap)
 {
     std::string CertOkString;
 
-    if (StatusBitmap == 0) {
+    if (StatusBitmap == gloox::CertOk) {
         CertOkString += gCertStatusMap[gloox::CertOk];
     }
 

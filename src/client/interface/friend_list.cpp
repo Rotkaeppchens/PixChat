@@ -143,6 +143,51 @@ void DeleteFriendCallback(Fl_Widget* Widget, void* Data)
 }
 
 /**
+ * @brief Deletes the content of the friend list browser and asks for new content
+ *
+ * @return void
+ */
+void InterfaceRefreshFriendListDisplay()
+{
+    L_DEBUG("interface", "Refreshing friend list display.");
+
+    if (!GnfIsConnected()) {
+        L_DEBUG("interface", "Client is not connected. Cant refresh friend list.");
+        return;
+    }
+
+    if (gFriendListBrowser == nullptr) {
+        L_DEBUG("interface", "No friend list widget, cant refresh friend list.");
+        return;
+    }
+
+    if (gFriendListBrowser->size() != 0) {
+        gFriendListBrowser->clear();
+    }
+
+    Fl_PNG_Image* LightRed = new Fl_PNG_Image("../res/light_red.png");
+    Fl_PNG_Image* LightGreen = new Fl_PNG_Image("../res/light_green.png");
+    Fl_PNG_Image* LightYellow = new Fl_PNG_Image("../res/light_yellow.png");
+
+    std::vector<UserId> FullRoster = GnfGetFullFriendRoster();
+    for (unsigned int i = 0; i != FullRoster.size(); ++i) {
+        std::string BareUsername = FullRoster[i].Bare;
+        std::string* Username = new std::string(FullRoster[i].Bare);
+
+        gFriendListBrowser->add(BareUsername.c_str());
+        gFriendListBrowser->data(i + 1, (void*)Username);
+
+        if (FullRoster[i].IsOnline) {
+            gFriendListBrowser->icon(i + 1, LightGreen->copy(15, 15));
+        } else {
+            gFriendListBrowser->icon(i + 1, LightRed->copy(15, 15));
+        }
+    }
+
+    gFriendListBrowser->top_window()->redraw();
+}
+
+/**
  * @brief The callback function to create the friend list window.
  *
  * @param Widget The widget who calls
@@ -174,29 +219,12 @@ void CreateFriendListWindow(Fl_Widget*, void*)
     Fl_Select_Browser* FriendListBrowser = new Fl_Select_Browser(10, 140, 230, 450);
     FriendListBrowser->callback((Fl_Callback*)LineDoubleClickCallback);
 
-    Fl_PNG_Image* LightRed = new Fl_PNG_Image("../res/light_red.png");
-    Fl_PNG_Image* LightGreen = new Fl_PNG_Image("../res/light_green.png");
-    Fl_PNG_Image* LightYellow = new Fl_PNG_Image("../res/light_yellow.png");
-
-    std::vector<UserId> FullRoster = GnfGetFullFriendRoster();
-    for (unsigned int i = 0; i != FullRoster.size(); ++i) {
-        std::string BareUsername = FullRoster[i].Bare;
-        std::string* Username = new std::string(FullRoster[i].Bare);
-
-        FriendListBrowser->add(BareUsername.c_str());
-        FriendListBrowser->data(i + 1, (void*)Username);
-
-        if (FullRoster[i].IsOnline) {
-            FriendListBrowser->icon(i + 1, LightGreen->copy(15, 15));
-        } else {
-            FriendListBrowser->icon(i + 1, LightRed->copy(15, 15));
-        }
-    }
-
     FriendListBrowser->textsize(15);
     FriendListBrowser->box(FL_BORDER_BOX);
 
     gFriendListBrowser = FriendListBrowser;
+
+    InterfaceRefreshFriendListDisplay();
 
     FriendListWindow->end();
     FriendListWindow->show();

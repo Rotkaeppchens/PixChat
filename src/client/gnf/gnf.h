@@ -54,8 +54,8 @@ class FriendRoster : public gloox::RosterListener
     virtual void handleRoster(const gloox::Roster &roster);
     virtual void handleRosterPresence(const gloox::RosterItem &rosterItem, const std::string &resource, gloox::Presence::PresenceType presence, const std::string &msg);
     virtual void handleSelfPresence(const gloox::RosterItem &rosterItem, const std::string &resource, gloox::Presence::PresenceType presence, const std::string &msg);
-    virtual bool handleSubscriptionRequest(const gloox::JID &jid, const std::string &msg);
-    virtual bool handleUnsubscriptionRequest(const gloox::JID &jid, const std::string &msg);
+    virtual bool handleSubscriptionRequest(const gloox::JID &Jid, const std::string &Msg);
+    virtual bool handleUnsubscriptionRequest(const gloox::JID &Jid, const std::string &Msg);
     virtual void handleNonrosterPresence(const gloox::Presence &presence);
     virtual void handleRosterError(const gloox::IQ &iq);
 };
