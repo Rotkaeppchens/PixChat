@@ -246,7 +246,7 @@ void InterfaceDisplayErrorForm(const std::string &Message)
  */
 void InterfaceDisplayInfoForm(const std::string &Message)
 {
-    fl_info(Message.c_str());
+    fl_message(Message.c_str());
 }
 
 /**

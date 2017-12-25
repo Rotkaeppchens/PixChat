@@ -48,6 +48,7 @@ void ConnListener::onConnect()
 void ConnListener::onDisconnect(gloox::ConnectionError Error)
 {
     InterfaceSetInfoMsg("Disconnected.");
+    InterfaceDisplayInfoForm("Disconnected.");
 
     if (Error == gloox::ConnNoError) {
         L_INFO("gnf", "Disconnected.");
