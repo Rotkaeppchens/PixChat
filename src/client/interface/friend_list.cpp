@@ -53,6 +53,18 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
 }
 
 /**
+ * @brief The callback to display the user profile
+ *
+ * @param Widget The calling widget
+ * @param Data The user data
+ * @return void
+ */
+void DisplayUserProfileCallback(Fl_Widget* Widget, void* Data)
+{
+    fl_message("Coming soon.");
+}
+
+/**
  * @brief The callback function for the start chat button
  *
  * @param Widget* The widget who calls
@@ -153,6 +165,7 @@ void CreateFriendListWindow(Fl_Widget*, void*)
 
     Fl_Button* ShowProfileButton = new Fl_Button(90, 90, 70, 30, "SP");
     ShowProfileButton->box(FL_BORDER_BOX);
+    ShowProfileButton->callback((Fl_Callback*)DisplayUserProfileCallback);
 
     Fl_Button* DeleteFriendButton = new Fl_Button(170, 90, 70, 30, "DF");
     DeleteFriendButton->box(FL_BORDER_BOX);
