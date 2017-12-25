@@ -10,6 +10,7 @@
 #include "../includes/log.h" // The log header
 #include "../includes/config.h" // The config header
 #include "../includes/interface.h" // The interface header
+#include "../includes/globals.h" // The global macros
 
 #include <iostream>
 #include <ctime>
@@ -20,6 +21,8 @@
 #include <gloox/messagehandler.h> // The gloox message handler
 #include <gloox/connectionlistener.h> // The gloox connection listener
 #include <gloox/rostermanager.h>
+#include <gloox/disco.h>
+#include <gloox/discohandler.h>
 
 #ifndef GNF_H
 #define GNF_H

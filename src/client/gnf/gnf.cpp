@@ -42,6 +42,9 @@ void GnfInitChatUser()
     gMainChatClient->rosterManager()->registerRosterListener(friendRoster);
     gFriendRoster = friendRoster;
 
+    gMainChatClient->disco()->setVersion(PROJECT_NAME, PROJECT_VERSION_NR);
+    gMainChatClient->disco()->setIdentity("client", "desktop", PROJECT_NAME);
+
     std::string TlsActiveConfig = ReadConfigString("client.tls.active");
 
     if (TlsActiveConfig == "required") {
