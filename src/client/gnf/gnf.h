@@ -111,4 +111,6 @@ class FriendRoster : public gloox::RosterListener
     virtual void handleRosterError(const gloox::IQ &iq);
 };
 
+UserId FormatRosterItemToUserId(gloox::RosterItem* Item);
+
 #endif

@@ -29,4 +29,6 @@ void GnfInitChatUser();
 bool GnfUpdate(int Timeout = -1);
 
 void GnfSendMessage(const std::string &To, const std::string &Message);
+
 std::vector<UserId> GnfGetFullFriendRoster();
+UserId* GnfGetFriendData(const std::string &Id);

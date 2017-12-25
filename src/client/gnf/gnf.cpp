@@ -138,3 +138,46 @@ std::vector<UserId> GnfGetFullFriendRoster()
 
     return ReturnVec;
 }
+
+/**
+ * @brief Returns a UserId object with the values if the friend exists
+ *
+ * @param Id The user id in the format username@host
+ * @return UserId The UserId Object for the friend
+ */
+UserId* GnfGetFriendData(const std::string &Id)
+{
+    gloox::JID Jid(Id);
+
+    gloox::RosterItem* Item = gMainChatClient->rosterManager()->getRosterItem(Jid);
+
+    UserId* ReturnId = new UserId();
+    (*ReturnId) = FormatRosterItemToUserId(Item);
+
+    return ReturnId;
+}
+
+/**
+ * @brief Formats the roster item to a user item
+ *
+ * @param Item The pointer to the roster item
+ * @return UserId The fromatted user id object.
+ */
+UserId FormatRosterItemToUserId(gloox::RosterItem* Item)
+{
+    UserId ReturnId;
+
+    gloox::JID RosterJid = Item->jidJID();
+    L_INFO("friendroster", "Converting roster item: " + RosterJid.full());
+
+    ReturnId.Full = RosterJid.full();
+    ReturnId.Bare = RosterJid.bare();
+    ReturnId.Username = RosterJid.username();
+    ReturnId.Server = RosterJid.server();
+    ReturnId.ServerRaw = RosterJid.serverRaw();
+    ReturnId.Resource = RosterJid.resource();
+
+    ReturnId.IsOnline = Item->online();
+
+    return ReturnId;
+}
