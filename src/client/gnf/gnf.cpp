@@ -67,7 +67,7 @@ bool GnfUpdate(int Timeout)
     gloox::ConnectionError ConError = gMainChatClient->recv(Timeout);
 
     if (ConError != gloox::ConnNoError) {
-        L_ERROR("gnf", "Connection error.");
+        //~ L_ERROR("gnf", "Connection error.");
         return false;
     }
 

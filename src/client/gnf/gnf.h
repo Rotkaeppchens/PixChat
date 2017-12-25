@@ -15,6 +15,7 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include <map>
 
 #include <gloox/client.h> // The gloox client
 #include <gloox/message.h> // The gloox message type
@@ -30,65 +31,10 @@
 class ConnListener : public gloox::ConnectionListener
 {
     public:
-    virtual void onConnect()
-    {
-        L_INFO("gnf", "Connected.");
-        InterfaceSetInfoMsg("Connected.");
-    }
+    virtual void onConnect();
+    virtual void onDisconnect(gloox::ConnectionError e);
+    virtual bool onTLSConnect(const gloox::CertInfo& Info);
 
-    virtual void onDisconnect(gloox::ConnectionError e)
-    {
-        InterfaceSetInfoMsg("Disconnected.");
-
-        //~ ERROR("gnf", "Test Error");
-
-        if (e == gloox::ConnNoError) {
-            L_INFO("gnf", "Disconnected.");
-            return;
-        }
-
-        if (e == gloox::ConnStreamError) {
-            L_ERROR("gnf", "Disconnect: Stream Error");
-        } else if (e == gloox::ConnAuthenticationFailed) {
-            L_ERROR("gnf", "Disconnect: Authentication Failed");
-        } else {
-            L_ERROR("gnf", "Disconnected with error.");
-        }
-    }
-
-    virtual bool onTLSConnect(const gloox::CertInfo& Info)
-    {
-        L_INFO("gnf", "Trying to connect using tls.");
-
-        time_t DateFrom(Info.date_from);
-        time_t DateTo(Info.date_to);
-
-        std::string InfoString = "";
-        InfoString += "status: " + std::to_string(Info.status) + "\n";
-        InfoString += "issuer: " + Info.issuer + "\n";
-        InfoString += "server: " + Info.server + "\n";
-        InfoString += "protocol: " + Info.protocol + "\n";
-        InfoString += "cipher: " + Info.cipher + "\n";
-        InfoString += "mac: " + Info.mac + "\n";
-        InfoString += "compression: " + Info.compression + "\n";
-        InfoString += "date from: ";
-        InfoString += std::ctime(&DateFrom);
-        InfoString += "date to: ";
-        InfoString += std::ctime(&DateTo);
-
-        L_INFO("gnf", "Certificate info: " + InfoString);
-
-        bool UserAnswer = InterfaceCreateAskForm("Do you want to accept this Certificate?\n" + InfoString);
-
-        if (UserAnswer) {
-            InterfaceSetInfoMsg("TLS Connected.");
-            return true;
-        } else {
-            L_INFO("gnf", "User didn't accept Certificate.");
-            InterfaceSetInfoMsg("TLS Disconnected.");
-            return false;
-        }
-    }
 };
 
 class MainChatMessageHandler : public gloox::MessageHandler
@@ -115,5 +61,6 @@ class FriendRoster : public gloox::RosterListener
 };
 
 UserId FormatRosterItemToUserId(gloox::RosterItem* Item);
+std::string TranslateCertStatus(const int &StatusBitmap);
 
 #endif

@@ -8,7 +8,7 @@ MAKE       = make --no-print-directory
 .EXPORT_ALL_VARIABLES:
 .PHONY: all
 
-all: gnf friend_roster
+all: gnf friend_roster conn_listener
 
 %:
 ifeq (0,${MAKELEVEL})
