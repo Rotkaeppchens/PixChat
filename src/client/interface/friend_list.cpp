@@ -24,7 +24,7 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
     Fl_Input* NameInput = new Fl_Input(10, 50, 280, 30);
     NameInput->box(FL_BORDER_BOX);
 
-    Fl_Button* AddFriendButton = new Fl_Button(10, 90, 50, 30, "Ok");
+    Fl_Button* AddFriendButton = new Fl_Button(125, 90, 50, 30, "Ok");
     AddFriendButton->box(FL_BORDER_BOX);
     AddFriendButton->shortcut(FL_ENTER);
 
@@ -51,10 +51,22 @@ void CreateFriendListWindow(Fl_Widget*, void*)
 
     Fl_Select_Browser* FriendListBrowser = new Fl_Select_Browser(10, 90, 180, 500);
 
+    Fl_PNG_Image* LightRed = new Fl_PNG_Image("../res/light_red.png");
+    Fl_PNG_Image* LightGreen = new Fl_PNG_Image("../res/light_green.png");
+    Fl_PNG_Image* LightYellow = new Fl_PNG_Image("../res/light_yellow.png");
+
     std::vector<UserId> FullRoster = GnfGetFullFriendRoster();
     for (unsigned int i = 0; i != FullRoster.size(); ++i) {
         FriendListBrowser->add(FullRoster[i].Bare.c_str());
+
+        if (FullRoster[i].IsOnline) {
+            FriendListBrowser->icon(i + 1, LightGreen->copy(15, 15));
+        } else {
+            FriendListBrowser->icon(i + 1, LightRed->copy(15, 15));
+        }
     }
+
+    FriendListBrowser->textsize(15);
 
     FriendListBrowser->box(FL_BORDER_BOX);
 

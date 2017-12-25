@@ -21,6 +21,8 @@ class UserId
     std::string Server;
     std::string ServerRaw;
     std::string Resource;
+
+    bool IsOnline;
 };
 
 void GnfInitChatUser();

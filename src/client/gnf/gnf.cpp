@@ -113,5 +113,28 @@ void MainChatMessageHandler::handleMessage(const gloox::Message &stanza, gloox::
  */
 std::vector<UserId> GnfGetFullFriendRoster()
 {
-    return gFriendRoster->GetFullFriendRoster();
+    std::vector<UserId> ReturnVec;
+
+    gloox::Roster* FullRoster = gMainChatClient->rosterManager()->roster();
+
+    gloox::Roster::const_iterator RosterIter = FullRoster->begin();
+    for (; RosterIter != FullRoster->end(); ++RosterIter) {
+        UserId SingleId;
+
+        gloox::JID RosterJid = RosterIter->second->jidJID();
+        L_INFO("friendroster", "Item on roster: " + RosterJid.full());
+
+        SingleId.Full = RosterJid.full();
+        SingleId.Bare = RosterJid.bare();
+        SingleId.Username = RosterJid.username();
+        SingleId.Server = RosterJid.server();
+        SingleId.ServerRaw = RosterJid.serverRaw();
+        SingleId.Resource = RosterJid.resource();
+
+        SingleId.IsOnline = RosterIter->second->online();
+
+        ReturnVec.push_back(SingleId);
+    }
+
+    return ReturnVec;
 }

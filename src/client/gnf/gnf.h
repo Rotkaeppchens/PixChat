@@ -109,11 +109,6 @@ class FriendRoster : public gloox::RosterListener
     virtual bool handleUnsubscriptionRequest(const gloox::JID &jid, const std::string &msg);
     virtual void handleNonrosterPresence(const gloox::Presence &presence);
     virtual void handleRosterError(const gloox::IQ &iq);
-
-    std::vector<UserId> GetFullFriendRoster();
-
-    private:
-    std::vector<gloox::JID> mRosterVec;
 };
 
 #endif

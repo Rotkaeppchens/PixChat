@@ -36,15 +36,6 @@ void FriendRoster::handleItemUnsubscribed(const gloox::JID &jid)
 void FriendRoster::handleRoster(const gloox::Roster &roster)
 {
     L_INFO("friendroster", "Handling inital roster.");
-
-    gloox::Roster::const_iterator RosterIter = roster.begin();
-    for (; RosterIter != roster.end(); ++RosterIter) {
-        gloox::JID RosterJid = RosterIter->second->jidJID();
-
-        this->mRosterVec.push_back(RosterJid);
-
-        L_INFO("friendroster", "Item on roster: " + RosterJid.full());
-    }
 }
 
 void FriendRoster::handleRosterPresence(const gloox::RosterItem &rosterItem, const std::string &resource, gloox::Presence::PresenceType presence, const std::string &msg)
@@ -77,29 +68,4 @@ void FriendRoster::handleNonrosterPresence(const gloox::Presence &presence)
 void FriendRoster::handleRosterError(const gloox::IQ &iq)
 {
     L_INFO("friendroster", "Handle roster error");
-}
-
-/**
- * @brief This returns a vector with all friends converted to UserId
- *
- * @return vector<UserId>
- */
-std::vector<UserId> FriendRoster::GetFullFriendRoster()
-{
-    std::vector<UserId> ReturnVec;
-
-    for (unsigned int i = 0; i != this->mRosterVec.size(); ++i) {
-        UserId SingleId;
-
-        SingleId.Full = this->mRosterVec[i].full();
-        SingleId.Bare = this->mRosterVec[i].bare();
-        SingleId.Username = this->mRosterVec[i].username();
-        SingleId.Server = this->mRosterVec[i].server();
-        SingleId.ServerRaw = this->mRosterVec[i].serverRaw();
-        SingleId.Resource = this->mRosterVec[i].resource();
-
-        ReturnVec.push_back(SingleId);
-    }
-
-    return ReturnVec;
 }
