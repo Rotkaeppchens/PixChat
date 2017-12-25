@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <regex>
 
 #include <FL/Fl.H> // The fltk base
 #include <FL/Fl_Window.H> // The fltk Window widget

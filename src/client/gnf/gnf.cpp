@@ -42,6 +42,9 @@ void GnfInitChatUser()
     gMainChatClient->rosterManager()->registerRosterListener(friendRoster);
     gFriendRoster = friendRoster;
 
+    gMainChatClient->disco()->setVersion(PROJECT_NAME, PROJECT_VERSION_NR);
+    gMainChatClient->disco()->setIdentity("client", "desktop", PROJECT_NAME);
+
     std::string TlsActiveConfig = ReadConfigString("client.tls.active");
 
     if (TlsActiveConfig == "required") {
@@ -64,7 +67,21 @@ bool GnfUpdate(int Timeout)
     gloox::ConnectionError ConError = gMainChatClient->recv(Timeout);
 
     if (ConError != gloox::ConnNoError) {
-        L_ERROR("gnf", "Connection error.");
+        //~ L_ERROR("gnf", "Connection error.");
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @brief Returns if the client is currently connected
+ *
+ * @return bool The connection status
+ */
+bool GnfIsConnected()
+{
+    if (gMainChatClient == nullptr) {
         return false;
     }
 
@@ -113,5 +130,110 @@ void MainChatMessageHandler::handleMessage(const gloox::Message &stanza, gloox::
  */
 std::vector<UserId> GnfGetFullFriendRoster()
 {
-    return gFriendRoster->GetFullFriendRoster();
+    std::vector<UserId> ReturnVec;
+
+    gloox::Roster* FullRoster = gMainChatClient->rosterManager()->roster();
+
+    gloox::Roster::const_iterator RosterIter = FullRoster->begin();
+    for (; RosterIter != FullRoster->end(); ++RosterIter) {
+        UserId SingleId;
+
+        gloox::JID RosterJid = RosterIter->second->jidJID();
+        L_INFO("friendroster", "Item on roster: " + RosterJid.full());
+
+        SingleId.Full = RosterJid.full();
+        SingleId.Bare = RosterJid.bare();
+        SingleId.Username = RosterJid.username();
+        SingleId.Server = RosterJid.server();
+        SingleId.ServerRaw = RosterJid.serverRaw();
+        SingleId.Resource = RosterJid.resource();
+
+        SingleId.IsOnline = RosterIter->second->online();
+
+        ReturnVec.push_back(SingleId);
+    }
+
+    return ReturnVec;
+}
+
+/**
+ * @brief Returns a UserId object with the values if the friend exists
+ *
+ * @param Id The user id in the format username@host
+ * @return UserId The UserId Object for the friend
+ */
+UserId* GnfGetFriendData(const std::string &Id)
+{
+    gloox::JID Jid(Id);
+
+    gloox::RosterItem* Item = gMainChatClient->rosterManager()->getRosterItem(Jid);
+
+    UserId* ReturnId = new UserId();
+    (*ReturnId) = FormatRosterItemToUserId(Item);
+
+    return ReturnId;
+}
+
+/**
+ * @brief Formats the roster item to a user item
+ *
+ * @param Item The pointer to the roster item
+ * @return UserId The fromatted user id object.
+ */
+UserId FormatRosterItemToUserId(gloox::RosterItem* Item)
+{
+    UserId ReturnId;
+
+    gloox::JID RosterJid = Item->jidJID();
+    L_INFO("friendroster", "Converting roster item: " + RosterJid.full());
+
+    ReturnId.Full = RosterJid.full();
+    ReturnId.Bare = RosterJid.bare();
+    ReturnId.Username = RosterJid.username();
+    ReturnId.Server = RosterJid.server();
+    ReturnId.ServerRaw = RosterJid.serverRaw();
+    ReturnId.Resource = RosterJid.resource();
+
+    ReturnId.IsOnline = Item->online();
+
+    return ReturnId;
+}
+
+/**
+ * @brief Adds a friend to the roster
+ *
+ * @param Id The id which should be added.
+ * @return void
+ */
+void GnfAddFriendToRoster(const std::string &Id)
+{
+    //~ L_DEBUG("gnf", "Adding friend to roster: " + Id);
+
+    std::string FullId(Id);
+
+    if (Id.find("@") == std::string::npos) {
+        FullId += "@" + ReadConfigString("client.account.host");
+    }
+
+    gloox::JID Jid(FullId);
+
+    L_DEBUG("gnf", "Trying to subscribe: " + FullId);
+
+    gMainChatClient->rosterManager()->subscribe(Jid);
+    gMainChatClient->rosterManager()->synchronize();
+}
+
+/**
+ * @brief Removes friend from roster
+ *
+ * @param Id The userid as string
+ * @return void The success
+ */
+void GnfRemoveFriendFromRoster(const std::string &Id)
+{
+    L_DEBUG("gnf", "Removing friend from roster: " + Id);
+
+    gloox::JID Jid(Id);
+    gMainChatClient->rosterManager()->remove(Jid);
+    gMainChatClient->rosterManager()->synchronize();
 }

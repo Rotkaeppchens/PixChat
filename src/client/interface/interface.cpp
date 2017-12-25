@@ -135,9 +135,11 @@ int InterfaceInit()
     Fl_Window* MainWindow = new Fl_Window(800, 560, WindowTitle.c_str());
     //~ MainWindow->resizable(MainWindow);
 
-    Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("icon.png");
+    Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("../res/icon.png");
     MainWindow->icon(MainWindowIcon);
 
+    L_DEBUG("interface", "Setting message window hotspot.");
+    fl_message_hotspot(0);
 
     L_DEBUG("interface", "Creating menu bar...");
     Fl_Menu_Item MenuItems[] = {
@@ -213,10 +215,18 @@ void InterfaceSetInfoMsg(const std::string &Message)
  * @brief Creates a popup in which the user can answer a question
  *
  * @param Message The message the user gets to see
+ * @param If the at sign should be escaped.
  * @return bool The answer
  */
-bool InterfaceCreateAskForm(const std::string &Message)
+bool InterfaceCreateAskForm(std::string Message, bool ReplaceAtSign)
 {
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
     int UserAnswer;
     UserAnswer = fl_choice(Message.c_str(), "Yes", "No", 0);
 
@@ -225,6 +235,44 @@ bool InterfaceCreateAskForm(const std::string &Message)
     } else {
         return false;
     }
+}
+
+/**
+ * @brief Displays a popup with an error message
+ *
+ * @param Message The Message to display
+ * @param If the at sign should be escaped.
+ * @return void
+ */
+void InterfaceDisplayErrorForm(std::string Message, bool ReplaceAtSign)
+{
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
+    fl_alert(Message.c_str());
+}
+
+/**
+ * @brief Display a popup with a message form
+ *
+ * @param Message the message to display
+ * @param If the at sign should be escaped.
+ * @return void
+ */
+void InterfaceDisplayInfoForm(std::string Message, bool ReplaceAtSign)
+{
+    if (ReplaceAtSign) {
+        std::regex RegexStr("@");
+        Message = std::regex_replace(Message, RegexStr, "@@");
+
+        L_DEBUG("interface", "Replaced string: " + Message);
+    }
+
+    fl_message(Message.c_str());
 }
 
 /**

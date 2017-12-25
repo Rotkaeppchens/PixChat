@@ -12,6 +12,10 @@ int InterfaceInit();
 int InterfaceCheck();
 
 void InterfaceSetInfoMsg(const std::string &Message);
-bool InterfaceCreateAskForm(const std::string &Message);
+bool InterfaceCreateAskForm(std::string Message, bool ReplaceAtSign = false);
+void InterfaceDisplayErrorForm(std::string Message, bool ReplaceAtSign = false);
+void InterfaceDisplayInfoForm(std::string Message, bool ReplaceAtSign = false);
 
 void DisplayIncomingMessage(const std::string &Text, const std::string &From);
+
+void InterfaceRefreshFriendListDisplay();

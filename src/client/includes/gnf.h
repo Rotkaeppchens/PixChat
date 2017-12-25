@@ -21,10 +21,18 @@ class UserId
     std::string Server;
     std::string ServerRaw;
     std::string Resource;
+
+    bool IsOnline;
 };
 
 void GnfInitChatUser();
 bool GnfUpdate(int Timeout = -1);
 
+bool GnfIsConnected();
+
 void GnfSendMessage(const std::string &To, const std::string &Message);
+
 std::vector<UserId> GnfGetFullFriendRoster();
+UserId* GnfGetFriendData(const std::string &Id);
+void GnfAddFriendToRoster(const std::string &Id);
+void GnfRemoveFriendFromRoster(const std::string &Id);

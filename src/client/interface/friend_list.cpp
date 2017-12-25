@@ -7,6 +7,25 @@
 
 #include "interface.h"
 
+Fl_Select_Browser* gFriendListBrowser;
+
+/**
+ * @brief The callback for the add friend button
+ *
+ * @param Widget The calling widget
+ * @param Data The data
+ * @return void
+ */
+void AddFriendCallback(Fl_Widget* Widget, void* Data)
+{
+    Fl_Input* NameInput = (Fl_Input*)Data;
+
+    GnfAddFriendToRoster(NameInput->value());
+
+    Fl_Window* WidgetWindow = Widget->top_window();
+    Fl::delete_widget(WidgetWindow);
+}
+
 /**
  * @brief The callback for the add friends window
  *
@@ -24,12 +43,148 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
     Fl_Input* NameInput = new Fl_Input(10, 50, 280, 30);
     NameInput->box(FL_BORDER_BOX);
 
-    Fl_Button* AddFriendButton = new Fl_Button(10, 90, 50, 30, "Ok");
+    Fl_Button* AddFriendButton = new Fl_Button(125, 90, 50, 30, "Ok");
     AddFriendButton->box(FL_BORDER_BOX);
     AddFriendButton->shortcut(FL_ENTER);
+    AddFriendButton->callback((Fl_Callback*)AddFriendCallback, (void*)NameInput);
 
     AddFriendWindow->end();
     AddFriendWindow->show();
+}
+
+/**
+ * @brief The callback to display the user profile
+ *
+ * @param Widget The calling widget
+ * @param Data The user data
+ * @return void
+ */
+void DisplayUserProfileCallback(Fl_Widget* Widget, void* Data)
+{
+    fl_message("Coming soon.");
+}
+
+/**
+ * @brief The callback function for the start chat button
+ *
+ * @param Widget* The widget who calls
+ * @param void* The data (in this case the friend list browser)
+ * @return void
+ */
+void StartChatCallback(Fl_Widget*, void* Data)
+{
+    int SelectedLine = gFriendListBrowser->value();
+
+    if (SelectedLine == 0) {
+        return;
+    }
+
+    std::string* Username = (std::string*)gFriendListBrowser->data(SelectedLine);
+    UserId* UserData = GnfGetFriendData(*Username);
+
+    L_DEBUG("interface", "Starting chat with: " + UserData->Username);
+
+    DisplayIncomingMessage("", UserData->Username);
+}
+
+/**
+ * @brief Line double click callback
+ *
+ * @param Widget The calling widget
+ * @param Data The data
+ * @return void
+ */
+void LineDoubleClickCallback(Fl_Widget* Widget, void* Data)
+{
+    if (
+        Fl::event_clicks() != 0
+        && Fl::event_button() == FL_LEFT_MOUSE
+    ) {
+        int SelectedLine = gFriendListBrowser->value();
+
+        if (SelectedLine == 0) {
+            return;
+        }
+
+        std::string* Username = (std::string*)gFriendListBrowser->data(SelectedLine);
+        UserId* UserData = GnfGetFriendData(*Username);
+
+        L_DEBUG("interface", "Starting chat with: " + UserData->Username);
+
+        DisplayIncomingMessage("", UserData->Username);
+    }
+}
+
+/**
+ * @brief Removes friend from roster and asks for confirmation
+ *
+ * @param Widget The calling widget
+ * @param Data The void pointer to the data
+ * @return void
+ */
+void DeleteFriendCallback(Fl_Widget* Widget, void* Data)
+{
+    int SelectedLine = gFriendListBrowser->value();
+
+    if (SelectedLine == 0) {
+        return;
+    }
+
+    std::string* Username = (std::string*) gFriendListBrowser->data(SelectedLine);
+
+    L_INFO("interface", "Asking user to remove friend: " + (*Username));
+
+    if (InterfaceCreateAskForm("Do you really want to unfriend: " + (*Username), true)) {
+        L_INFO("interface", "Removing friend: " + (*Username));
+        GnfRemoveFriendFromRoster(*Username);
+    } else {
+        return;
+    }
+}
+
+/**
+ * @brief Deletes the content of the friend list browser and asks for new content
+ *
+ * @return void
+ */
+void InterfaceRefreshFriendListDisplay()
+{
+    L_DEBUG("interface", "Refreshing friend list display.");
+
+    if (!GnfIsConnected()) {
+        L_DEBUG("interface", "Client is not connected. Cant refresh friend list.");
+        return;
+    }
+
+    if (gFriendListBrowser == nullptr) {
+        L_DEBUG("interface", "No friend list widget, cant refresh friend list.");
+        return;
+    }
+
+    if (gFriendListBrowser->size() != 0) {
+        gFriendListBrowser->clear();
+    }
+
+    Fl_PNG_Image* LightRed = new Fl_PNG_Image("../res/light_red.png");
+    Fl_PNG_Image* LightGreen = new Fl_PNG_Image("../res/light_green.png");
+    Fl_PNG_Image* LightYellow = new Fl_PNG_Image("../res/light_yellow.png");
+
+    std::vector<UserId> FullRoster = GnfGetFullFriendRoster();
+    for (unsigned int i = 0; i != FullRoster.size(); ++i) {
+        std::string BareUsername = FullRoster[i].Bare;
+        std::string* Username = new std::string(FullRoster[i].Bare);
+
+        gFriendListBrowser->add(BareUsername.c_str());
+        gFriendListBrowser->data(i + 1, (void*)Username);
+
+        if (FullRoster[i].IsOnline) {
+            gFriendListBrowser->icon(i + 1, LightGreen->copy(15, 15));
+        } else {
+            gFriendListBrowser->icon(i + 1, LightRed->copy(15, 15));
+        }
+    }
+
+    gFriendListBrowser->top_window()->redraw();
 }
 
 /**
@@ -40,23 +195,36 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
  */
 void CreateFriendListWindow(Fl_Widget*, void*)
 {
-    Fl_Window* FriendListWindow = new Fl_Window(200, 600, "Friend List");
+    Fl_Window* FriendListWindow = new Fl_Window(250, 600, "Friend List");
 
-    Fl_Box* TitleBox = new Fl_Box(10, 10, 180, 30, "Friend List");
+    Fl_Box* TitleBox = new Fl_Box(10, 10, 230, 30, "Friend List");
     TitleBox->box(FL_BORDER_BOX);
 
-    Fl_Button* AddFriendButton = new Fl_Button(10, 50, 180, 30, "Add Friend");
+    Fl_Button* AddFriendButton = new Fl_Button(10, 50, 230, 30, "Add Friend");
     AddFriendButton->box(FL_BORDER_BOX);
     AddFriendButton->callback((Fl_Callback*)CreateAddFriendWindow);
 
-    Fl_Select_Browser* FriendListBrowser = new Fl_Select_Browser(10, 90, 180, 500);
+    Fl_Button* StartChatButton = new Fl_Button(10, 90, 70, 30, "SC");
+    StartChatButton->box(FL_BORDER_BOX);
+    StartChatButton->callback((Fl_Callback*)StartChatCallback);
 
-    std::vector<UserId> FullRoster = GnfGetFullFriendRoster();
-    for (unsigned int i = 0; i != FullRoster.size(); ++i) {
-        FriendListBrowser->add(FullRoster[i].Bare.c_str());
-    }
+    Fl_Button* ShowProfileButton = new Fl_Button(90, 90, 70, 30, "SP");
+    ShowProfileButton->box(FL_BORDER_BOX);
+    ShowProfileButton->callback((Fl_Callback*)DisplayUserProfileCallback);
 
+    Fl_Button* DeleteFriendButton = new Fl_Button(170, 90, 70, 30, "DF");
+    DeleteFriendButton->box(FL_BORDER_BOX);
+    DeleteFriendButton->callback((Fl_Callback*)DeleteFriendCallback);
+
+    Fl_Select_Browser* FriendListBrowser = new Fl_Select_Browser(10, 140, 230, 450);
+    FriendListBrowser->callback((Fl_Callback*)LineDoubleClickCallback);
+
+    FriendListBrowser->textsize(15);
     FriendListBrowser->box(FL_BORDER_BOX);
+
+    gFriendListBrowser = FriendListBrowser;
+
+    InterfaceRefreshFriendListDisplay();
 
     FriendListWindow->end();
     FriendListWindow->show();
