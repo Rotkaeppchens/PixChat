@@ -32,3 +32,5 @@ void GnfSendMessage(const std::string &To, const std::string &Message);
 
 std::vector<UserId> GnfGetFullFriendRoster();
 UserId* GnfGetFriendData(const std::string &Id);
+void GnfAddFriendToRoster(const std::string &Id);
+void GnfRemoveFriendFromRoster(const std::string &Id);

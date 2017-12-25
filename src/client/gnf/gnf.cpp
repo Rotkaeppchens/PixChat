@@ -181,3 +181,29 @@ UserId FormatRosterItemToUserId(gloox::RosterItem* Item)
 
     return ReturnId;
 }
+
+/**
+ * @brief Adds a friend to the roster
+ *
+ * @param Id The id which should be added.
+ * @return void
+ */
+void GnfAddFriendToRoster(const std::string &Id)
+{
+    L_DEBUG("gnf", "Adding friend to roster: " + Id);
+    gMainChatClient->rosterManager()->subscribe(Id);
+}
+
+/**
+ * @brief Removes friend from roster
+ *
+ * @param Id The userid as string
+ * @return void The success
+ */
+void GnfRemoveFriendFromRoster(const std::string &Id)
+{
+    L_DEBUG("gnf", "Removing friend from roster: " + Id);
+
+    gloox::JID Jid(Id);
+    gMainChatClient->rosterManager()->remove(Jid);
+}

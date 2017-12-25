@@ -7,6 +7,25 @@
 
 #include "interface.h"
 
+Fl_Select_Browser* gFriendListBrowser;
+
+/**
+ * @brief The callback for the add friend button
+ *
+ * @param Widget The calling widget
+ * @param Data The data
+ * @return void
+ */
+void AddFriendCallback(Fl_Widget* Widget, void* Data)
+{
+    Fl_Input* NameInput = (Fl_Input*)Data;
+
+    GnfAddFriendToRoster(NameInput->value());
+
+    Fl_Window* WidgetWindow = Widget->top_window();
+    Fl::delete_widget(WidgetWindow);
+}
+
 /**
  * @brief The callback for the add friends window
  *
@@ -27,6 +46,7 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
     Fl_Button* AddFriendButton = new Fl_Button(125, 90, 50, 30, "Ok");
     AddFriendButton->box(FL_BORDER_BOX);
     AddFriendButton->shortcut(FL_ENTER);
+    AddFriendButton->callback((Fl_Callback*)AddFriendCallback, (void*)NameInput);
 
     AddFriendWindow->end();
     AddFriendWindow->show();
@@ -41,15 +61,13 @@ void CreateAddFriendWindow(Fl_Widget*, void*)
  */
 void StartChatCallback(Fl_Widget*, void* Data)
 {
-    Fl_Select_Browser* FriendListBrowser = (Fl_Select_Browser*)Data;
-
-    int SelectedLine = FriendListBrowser->value();
+    int SelectedLine = gFriendListBrowser->value();
 
     if (SelectedLine == 0) {
         return;
     }
 
-    std::string* Username = (std::string*)FriendListBrowser->data(SelectedLine);
+    std::string* Username = (std::string*)gFriendListBrowser->data(SelectedLine);
     UserId* UserData = GnfGetFriendData(*Username);
 
     L_DEBUG("interface", "Starting chat with: " + UserData->Username);
@@ -70,20 +88,45 @@ void LineDoubleClickCallback(Fl_Widget* Widget, void* Data)
         Fl::event_clicks() != 0
         && Fl::event_button() == FL_LEFT_MOUSE
     ) {
-        Fl_Select_Browser* FriendListBrowser = (Fl_Select_Browser*)Widget;
-
-        int SelectedLine = FriendListBrowser->value();
+        int SelectedLine = gFriendListBrowser->value();
 
         if (SelectedLine == 0) {
             return;
         }
 
-        std::string* Username = (std::string*)FriendListBrowser->data(SelectedLine);
+        std::string* Username = (std::string*)gFriendListBrowser->data(SelectedLine);
         UserId* UserData = GnfGetFriendData(*Username);
 
         L_DEBUG("interface", "Starting chat with: " + UserData->Username);
 
         DisplayIncomingMessage("", UserData->Username);
+    }
+}
+
+/**
+ * @brief Removes friend from roster and asks for confirmation
+ *
+ * @param Widget The calling widget
+ * @param Data The void pointer to the data
+ * @return void
+ */
+void DeleteFriendCallback(Fl_Widget* Widget, void* Data)
+{
+    int SelectedLine = gFriendListBrowser->value();
+
+    if (SelectedLine == 0) {
+        return;
+    }
+
+    std::string* Username = (std::string*) gFriendListBrowser->data(SelectedLine);
+
+    L_INFO("interface", "Asking user to remove friend: " + (*Username));
+
+    if (InterfaceCreateAskForm("Do you really want to unfriend: " + (*Username))) {
+        L_INFO("interface", "Removing friend: " + (*Username));
+        GnfRemoveFriendFromRoster(*Username);
+    } else {
+        return;
     }
 }
 
@@ -106,12 +149,14 @@ void CreateFriendListWindow(Fl_Widget*, void*)
 
     Fl_Button* StartChatButton = new Fl_Button(10, 90, 70, 30, "SC");
     StartChatButton->box(FL_BORDER_BOX);
+    StartChatButton->callback((Fl_Callback*)StartChatCallback);
 
     Fl_Button* ShowProfileButton = new Fl_Button(90, 90, 70, 30, "SP");
     ShowProfileButton->box(FL_BORDER_BOX);
 
     Fl_Button* DeleteFriendButton = new Fl_Button(170, 90, 70, 30, "DF");
     DeleteFriendButton->box(FL_BORDER_BOX);
+    DeleteFriendButton->callback((Fl_Callback*)DeleteFriendCallback);
 
     Fl_Select_Browser* FriendListBrowser = new Fl_Select_Browser(10, 140, 230, 450);
     FriendListBrowser->callback((Fl_Callback*)LineDoubleClickCallback);
@@ -138,7 +183,7 @@ void CreateFriendListWindow(Fl_Widget*, void*)
     FriendListBrowser->textsize(15);
     FriendListBrowser->box(FL_BORDER_BOX);
 
-    StartChatButton->callback((Fl_Callback*)StartChatCallback, (void*)FriendListBrowser);
+    gFriendListBrowser = FriendListBrowser;
 
     FriendListWindow->end();
     FriendListWindow->show();
