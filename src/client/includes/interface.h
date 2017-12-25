@@ -13,5 +13,6 @@ int InterfaceCheck();
 
 void InterfaceSetInfoMsg(const std::string &Message);
 bool InterfaceCreateAskForm(const std::string &Message);
+void InterfaceDisplayErrorForm(const std::string &Message);
 
 void DisplayIncomingMessage(const std::string &Text, const std::string &From);

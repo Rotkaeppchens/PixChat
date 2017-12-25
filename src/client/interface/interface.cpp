@@ -228,6 +228,17 @@ bool InterfaceCreateAskForm(const std::string &Message)
 }
 
 /**
+ * @brief Displays a popup with an error message
+ *
+ * @param Message The Message to display
+ * @return void
+ */
+void InterfaceDisplayErrorForm(const std::string &Message)
+{
+    fl_alert(Message.c_str());
+}
+
+/**
  * @brief This function displays a chat message and creates the display tab
  *
  * @param Text The text to display
