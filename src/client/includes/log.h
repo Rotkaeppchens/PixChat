@@ -49,5 +49,5 @@ bool LogInit(const std::string &LogFilePath);
 void LogMsg(
     const LogLevelEnum &LogLevel,
     const std::string &LogDomain,
-    const std::string &Message
+    std::string Message
 );

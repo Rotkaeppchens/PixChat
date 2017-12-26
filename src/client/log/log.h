@@ -18,9 +18,12 @@
 
 #include "../includes/log.h"
 #include "../includes/config.h"
-#include <string> // The standard string type
-#include <fstream> // The filestream type
 #include <vector> // The vector type
+#include <iostream> // The standard in/output
+#include <string>   // The standard string type
+#include <fstream>  // The file stream type
+#include <ctime>    // The time header from c
+#include <regex>    // The c++ regex functions
 
 /**
  * @struct DomainLogLevel

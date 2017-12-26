@@ -8,11 +8,7 @@
  * @date 11.12.2017
  */
 
-#include "log.h"    // The log header file
-#include <iostream> // The standard in/output
-#include <string>   // The standard string type
-#include <fstream>  // The file stream type
-#include <ctime>    // The time header from c
+#include "log.h" // The log header file
 
 /**
  * @brief Initializes the log module.
@@ -97,7 +93,7 @@ bool LogInit(const std::string &LogFilePath)
 void LogMsg(
     const LogLevelEnum &LogLevel,
     const std::string &LogDomain,
-    const std::string &Message
+    std::string Message
 ) {
     if (!IsLogLevelPrintable(LogLevel, LogDomain)) {
         return;
@@ -111,6 +107,11 @@ void LogMsg(
         std::to_string(LocalTime->tm_min) + ":" +
         std::to_string(LocalTime->tm_sec)
     ;
+
+    std::regex RegNl("\n");
+    std::regex RegMs("\\s+");
+    Message = std::regex_replace(Message, RegNl, " ");
+    Message = std::regex_replace(Message, RegMs, " ");
 
     gLogOutStrm <<
         "[" << NowStr << "] " <<
