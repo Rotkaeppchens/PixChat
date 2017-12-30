@@ -53,11 +53,13 @@ class InterfaceChatTab
     Fl_Text_Display* TextOutput;
     Fl_Text_Editor* TextInput;
     Fl_Button* SendButton;
+    Fl_Box* EventBox;
 
     std::string ChatTarget;
     std::string ChatHost;
 
     void AppendTextToOutput(const std::string &Text);
+    void SetEventMessage(const std::string &Text);
 
     InterfaceChatTab(int x, int y, int w, int h, const std::string &Target);
 };
