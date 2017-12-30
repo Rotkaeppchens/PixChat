@@ -1,8 +1,6 @@
 /**
  * @file
- * @brief The implementation of the config class
- *
- * Here we define the functions of the config class.
+ * @brief The implementation of the config module
  *
  * @author Lukas Deutscher
  * @date 07.12.2017
@@ -23,9 +21,9 @@
  * @return bool The success of the operation
  */
 bool LoadConfig(
-    std::string FileName,
-    std::string ConfigDelimiter,
-    std::string CommentChar
+    const std::string &FileName,
+    const std::string &ConfigDelimiter,
+    const std::string &CommentChar
 ) {
     gConfigFileName = FileName;
 
@@ -35,7 +33,6 @@ bool LoadConfig(
         std::cout << "There was an error opening the config file." << std::endl;
     }
 
-    std::vector<ConfigEntry> ConfigVec;
     std::string FileBuffer;
     while (getline(CfgIfStrm, FileBuffer)) {
         if (
@@ -50,9 +47,7 @@ bool LoadConfig(
 
         std::vector<std::string> SplittedLine = StrSplitFirst(FileBuffer, ConfigDelimiter);
 
-        ConfigEntry* CEntry = CreateConfigEntry(SplittedLine[0], SplittedLine[1]);
-
-        gConfigVec.push_back(CEntry);
+        gConfigMap[SplittedLine[0]] = SplittedLine[1];
     }
 
     CfgIfStrm.close();
@@ -60,56 +55,34 @@ bool LoadConfig(
 }
 
 /**
- * @brief This creates a new config entry and returns a pointer to it.
- *
- * This function takes to arguments a name and a value and returns a pointer
- * to a new ConfigEntry object with these values.
- *
- * @param Name The name of the name
- * @param Value The value of the pair
- * @return ConfigEntry* The pointer to the new entry
- */
-ConfigEntry* CreateConfigEntry(const std::string Name, const std::string Value)
-{
-    ConfigEntry* CE = new ConfigEntry();
-
-    CE->Name = Name;
-    CE->Value = Value;
-
-    return CE;
-}
-
-/**
  * @brief Dumps the config in the cout stream
  *
- * This functions dumps the entire config list in the cout stream
- * and returns the vector with the pointers to the entries.
+ * This functions dumps the entire config list in the cout stream.
  *
  * @return void
  */
 void DumpConfigEntries()
 {
-    for (unsigned int i = 0; i != gConfigVec.size(); ++i) {
-        std::cout << "Name: " << gConfigVec[i]->Name << " <--> ";
-        std::cout << "Value: " << gConfigVec[i]->Value << std::endl;
+    auto MapIter = gConfigMap.begin();
+    for (; MapIter != gConfigMap.end(); ++MapIter) {
+        std::cout << "Name: " << MapIter->first << " <--> ";
+        std::cout << "Value: " << MapIter->second << std::endl;
     }
 }
 
 /**
  * @brief Checks if the specified config key exists
  *
- * This function takes a config key name and iterates the saved configs,
- * and returns if the config key exists.
+ * This function takes a config key name and searches the saved configs,
+ * and returns it if the config key exists.
  *
  * @param ConfigName The name of the key to check
  * @return bool The result of the check.
  */
 bool ConfigKeyExists(const std::string &ConfigName)
 {
-    for (unsigned int i = 0; i != gConfigVec.size(); ++i) {
-        if (gConfigVec[i]->Name == ConfigName) {
-            return true;
-        }
+    if (gConfigMap.find(ConfigName) != gConfigMap.end()) {
+        return true;
     }
 
     return false;
@@ -128,19 +101,17 @@ bool ConfigKeyExists(const std::string &ConfigName)
  * @param ConfigName The name of the config value to get.
  * @return std::string The value as string
  */
-std::string ReadConfigString(const std::string ConfigName)
+std::string ReadConfigString(const std::string &ConfigName)
 {
-    for (unsigned int i = 0; i != gConfigVec.size(); ++i) {
-        if (gConfigVec[i]->Name != ConfigName) {
-            continue;
-        }
+    auto MapIter = gConfigMap.find(ConfigName);
 
-        return gConfigVec[i]->Value;
+    if (MapIter == gConfigMap.end()) {
+        std::cout << "Config value: " << ConfigName << " not found." << std::endl;
+        //~ L_ERROR("default", "Config value: " + ConfigName + " not found.");
+        return "";
     }
 
-    std::cout << "Value not found: " << ConfigName << std::endl;
-
-    return "";
+    return MapIter->second;
 }
 
 /**
@@ -152,7 +123,7 @@ std::string ReadConfigString(const std::string ConfigName)
  * @param ConfigName The name of the config value
  * @return int The value of the config as int
  */
-int ReadConfigInt(const std::string ConfigName)
+int ReadConfigInt(const std::string &ConfigName)
 {
     int ConfigValue = std::stoi(ReadConfigString(ConfigName));
 
@@ -168,7 +139,7 @@ int ReadConfigInt(const std::string ConfigName)
  * @param ConfigName The name of the config value
  * @return double The value of the config as double
  */
-double ReadConfigDouble(const std::string ConfigName)
+double ReadConfigDouble(const std::string &ConfigName)
 {
     double ConfigValue = std::stod(ReadConfigString(ConfigName));
 

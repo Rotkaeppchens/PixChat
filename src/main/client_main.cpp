@@ -10,12 +10,12 @@
  */
 
 #include "client_main.h"
-#include "includes/globals.h"
-#include "includes/log.h" // The log functions
-#include "includes/config.h" // The config class
-#include "includes/utility.h" // The helper functions
-#include "includes/interface.h" // The interface layer
-#include "includes/gnf.h" // The gloox network functions
+#include "../includes/globals.h"
+#include "../includes/log.h" // The log functions
+#include "../includes/config.h" // The config class
+#include "../includes/utility.h" // The helper functions
+#include "../includes/interface.h" // The interface layer
+#include "../includes/gnf.h" // The gloox network functions
 #include <iostream> // The standard in/output
 #include <string> // The standard string type
 
