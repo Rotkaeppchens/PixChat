@@ -8,8 +8,8 @@ FLAGS 	:= -Wall -std=c++0x $(shell fltk-config --use-images --cxxflags) $(shell 
 LIB 	:= $(shell fltk-config --use-images --ldflags) $(shell gloox-config --libs)
 INC		:= $(shell fltk-config --use-images --includedir)
 
-DIR 	:= ../../env/client/bin
-TMP		:= ../../build
+DIR 	:= ../env/bin
+TMP		:= ../build
 TMP_O 	:= $(TMP)/o
 TMP_D 	:= $(TMP)/d
 DFILE	:= $(TMP_D)/project.d
@@ -73,4 +73,4 @@ $(DFILE): $(SRC)
 %.o:
 	@echo Building $@  ...
 #~ 	@echo Targets $^ ...
-	@$(CC) -o $(TMP_O)/$@ $(filter %.cpp, $^)
+	@$(CC) -o $@ $(filter %.cpp, $^)
