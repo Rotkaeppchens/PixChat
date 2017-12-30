@@ -1,67 +1,76 @@
-PROJECT = PixChat
+PROJECT := PixChat
 
-TARGET 	= $(PROJECT)
-DEBUG 	=
-FLAGS 	= -Wall -std=c++0x $(shell fltk-config --use-images --cxxflags) $(shell gloox-config --cxxflags)
-LIB 	= $(shell fltk-config --use-images --ldflags) $(shell gloox-config --libs)
-INC		= $(shell fltk-config --use-images --includedir)
-DIR 	= ../../env/client/bin
-TMP 	= ../../build
-CC 		= $(OPTCACHE) g++ $(DEBUG) -c $(FLAGS)
-LD 		= $(OPTCACHE) g++ $(DEBUG)
-RM 		= rm
-CD 		= cd
-MAKE 	= make --no-print-directory
-DOXYCONF = doxy-conf
+TARGET 	:= $(PROJECT)
+
+DEBUG 	:=
+CACHE	:= ccache
+FLAGS 	:= -Wall -std=c++0x $(shell fltk-config --use-images --cxxflags) $(shell gloox-config --cxxflags)
+LIB 	:= $(shell fltk-config --use-images --ldflags) $(shell gloox-config --libs)
+INC		:= $(shell fltk-config --use-images --includedir)
+
+DIR 	:= ../../env/client/bin
+TMP		:= ../../build
+TMP_O 	:= $(TMP)/o
+TMP_D 	:= $(TMP)/d
+DFILE	:= $(TMP_D)/project.d
+
+CC 		:= $(CACHE) g++ $(DEBUG) -c $(FLAGS)
+LD 		:= $(CACHE) g++ $(DEBUG)
+RM 		:= rm
+CD 		:= cd
+DGEN	:= g++ -MM -MG
+
+DOXYCONF := doxy-conf
 
 ifeq ($(OS),Windows_NT)
-	OPTCACHE =
+	OPTSUFFIX := .exe
 else
-	OPTCACHE = ccache
+	OPTSUFFIX :=
 endif
 
-.EXPORT_ALL_VARIABLES:
-.PHONY: all main client_main config utility log interface gnf
 
-print:
-	@echo "############################## Building $(TARGET) ##############################"
+# The project modules
+MODULES := main config gnf includes interface log utility
+
+SRC :=
+
+# Including the mk files from the modules
+include $(patsubst %, %/module.mk, $(MODULES))
+
+# Include the dep file
+-include $(DFILE)
+
+# Determining the obj files
+OBJ := $(patsubst %.cpp, $(TMP_O)/%.o, $(notdir $(filter %.cpp, $(SRC))))
+
+help:
+	@echo $(PROJECT) help.
+	@echo	build 		Build the project.
+	@echo 	clean 		Clean the build environment.
+	@echo 	doxygen		Create The auto documentation.
+	@echo	help		Display this help.
+
 clean:
-	@echo Cleaning TMP and BIN Files && $(RM) $(DIR)/$(TARGET)
-	@$(RM) $(TMP)/*.o
-build: all link
-build_extra: all link doxygen
-arecmake:
-	@echo Make $(MAKETARGET) from root && cd $(MAKEDIR) && $(MAKE) $(MAKETARGET)
-link: print
-	@echo Linking... && $(LD) -o $(DIR)/$(TARGET) $(TMP)/*.o $(LIB) && echo FINISHED
-all: main client_main config log utility interface gnf
+	@echo Cleaning TMP and BIN Files
+	@$(RM) -f $(DIR)/$(TARGET)$(OPTSUFFIX)
+	@$(RM) -f $(TMP_O)/*.o
+	@$(RM) -f $(DFILE)
 
-main: main.cpp
-	@echo Building main ... && $(CC) main.cpp -o $(TMP)/main.o
-
-client_main: client_main.cpp
-	@echo Building client_main ... && $(CC) client_main.cpp -o $(TMP)/client_main.o
-
-config: print
-	@echo ROOTBUILD $@ && $(CD) $@ && $(MAKE)
-
-utility: print
-	@echo ROOTBUILD $@ && $(CD) $@ && $(MAKE)
-
-log: print
-	@echo ROOTBUILD $@ && $(CD) $@ && $(MAKE)
-
-interface: print
-	@echo ROOTBUILD $@ && $(CD) $@ && $(MAKE) all
-
-gnf: print
-	@echo ROOTBUILD $@ && $(CD) $@ && $(MAKE)
+build: $(OBJ)
+	@echo Linking...
+	@$(LD) -o $(DIR)/$(TARGET)$(OPTSUFFIX) $(TMP_O)/*.o $(LIB)
+	@echo Finished
 
 doxygen:
 	@echo Generating documentation ... && doxygen $(DOXYCONF)
 
-%:
-	@if test -e $@.cpp; then \
-	echo Building $@ ... && $(CC) $@.cpp -o $(TMP)/$@.o; \
-	else if test -d $@; then echo ROOTBUILD $@ && cd $@ && $(MAKE); fi \
-	fi
+$(DFILE): $(SRC)
+	@echo Removing old dependency file...
+	@$(RM) -f $(DFILE)
+	@echo Generating dependency file $(DFILE) ...
+	@$(DGEN) $(filter %.cpp, $(SRC)) | sed -e "s@\(.*.o:\)@$(TMP_O)/\1@" >> $(DFILE)
+
+%.o:
+	@echo Building $@  ...
+#~ 	@echo Targets $^ ...
+	@$(CC) -o $(TMP_O)/$@ $(filter %.cpp, $^)

@@ -6,6 +6,8 @@
  * @date 20.12.2017
  */
 
+#include <string>
+
 bool LoadConfig(const std::string &FileName, const std::string &ConfigDelimiter, const std::string &CommentChar);
 void DumpConfigEntries();
 bool ConfigKeyExists(const std::string &ConfigName);
