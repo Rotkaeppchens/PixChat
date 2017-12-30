@@ -8,7 +8,8 @@ FLAGS 	:= -Wall -std=c++0x $(shell fltk-config --use-images --cxxflags) $(shell 
 LIB 	:= $(shell fltk-config --use-images --ldflags) $(shell gloox-config --libs)
 INC		:= $(shell fltk-config --use-images --includedir)
 
-DIR 	:= ../env/bin
+ENV		:= ../env
+DIR 	:= $(ENV)/bin
 TMP		:= ../build
 TMP_O 	:= $(TMP)/o
 TMP_D 	:= $(TMP)/d
@@ -17,7 +18,7 @@ DFILE	:= $(TMP_D)/project.d
 CC 		:= $(CACHE) g++ $(DEBUG) -c $(FLAGS)
 LD 		:= $(CACHE) g++ $(DEBUG)
 RM 		:= rm
-CD 		:= cd
+MKDIR	:= mkdir
 DGEN	:= g++ -MM -MG
 
 DOXYCONF := doxy-conf
@@ -43,12 +44,24 @@ include $(patsubst %, %/module.mk, $(MODULES))
 # Determining the obj files
 OBJ := $(patsubst %.cpp, $(TMP_O)/%.o, $(notdir $(filter %.cpp, $(SRC))))
 
+install_env:
+	@echo Generating output folders ...
+	@$(MKDIR) $(TMP)
+	@$(MKDIR) $(TMP_O)
+	@$(MKDIR) $(TMP_D)
+	@$(MKDIR) $(ENV)
+	@$(MKDIR) $(DIR)
+	@$(MKDIR) $(ENV)/log
+	@$(MKDIR) $(ENV)/etc
+	@$(MKDIR) $(ENV)/res
+
 help:
 	@echo $(PROJECT) help.
 	@echo	build 		Build the project.
 	@echo 	clean 		Clean the build environment.
 	@echo 	doxygen		Create The auto documentation.
 	@echo	help		Display this help.
+	@echo	install_env Creates the folders in which make will put the tmp and bin files.
 
 clean:
 	@echo Cleaning TMP and BIN Files
