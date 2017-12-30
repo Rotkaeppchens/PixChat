@@ -31,6 +31,7 @@ bool LoadConfig(
 
     if (!CfgIfStrm.is_open()) {
         std::cout << "There was an error opening the config file." << std::endl;
+        return false;
     }
 
     std::string FileBuffer;
