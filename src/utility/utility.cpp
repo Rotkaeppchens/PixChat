@@ -63,3 +63,29 @@ std::string StrTrim(std::string Str)
 {
     return Str;
 }
+
+/**
+ * @brief Gets the name of the operating system as string
+ *
+ * :TODO: Find better solution to filter the operating system.
+ *
+ * @return string The name of the operating system.
+ */
+std::string GetOsString()
+{
+    #ifdef _WIN32
+    return "Windows";
+    #elif _WIN64
+    return "Windows";
+    #elif __unix || __unix__
+    return "Unix";
+    #elif __APPLE__ || __MACH__
+    return "Mac OSX";
+    #elif __linux__
+    return "Linux";
+    #elif __FreeBSD__
+    return "FreeBSD";
+    #else
+    return "Other";
+    #endif
+}
