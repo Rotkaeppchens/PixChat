@@ -13,6 +13,7 @@
  */
 gloox::Client* gMainChatClient;
 FriendRoster* gFriendRoster;
+std::map<std::string, gloox::MessageSession*> gMessageSessionMap;
 
 void GnfInitChatUser()
 {
@@ -32,8 +33,8 @@ void GnfInitChatUser()
 
     gMainChatClient = new gloox::Client(jid, ClientPass);
 
-    MainChatMessageHandler* MsgHandler = new MainChatMessageHandler();
-    gMainChatClient->registerMessageHandler(MsgHandler);
+    GnfMessageSessionHandler* SessHandler = new GnfMessageSessionHandler();
+    gMainChatClient->registerMessageSessionHandler(SessHandler);
 
     ConnListener* connListener = new ConnListener();
     gMainChatClient->registerConnectionListener(connListener);
@@ -42,8 +43,15 @@ void GnfInitChatUser()
     gMainChatClient->rosterManager()->registerRosterListener(friendRoster);
     gFriendRoster = friendRoster;
 
-    gMainChatClient->disco()->setVersion(PROJECT_NAME, PROJECT_VERSION_NR);
+    gMainChatClient->disco()->setVersion(PROJECT_NAME, PROJECT_VERSION_NR, GetOsString());
     gMainChatClient->disco()->setIdentity("client", "desktop", PROJECT_NAME);
+
+    L_INFO("gnf", "Setting client features...");
+    gMainChatClient->disco()->addFeature(gloox::XMLNS_CHAT_STATES);
+
+    gloox::ChatState* State = new gloox::ChatState(new gloox::Tag("ChatState"));
+    gMainChatClient->registerStanzaExtension(State->clone());
+
 
     std::string TlsActiveConfig = ReadConfigString("client.tls.active");
 
@@ -96,31 +104,6 @@ void GnfSendMessage(const std::string &To, const std::string &Message)
     L_INFO("gnf", "Sending message: " + Message + " To: " + Recipient.full());
 
     gMainChatClient->send(Msg);
-}
-
-void MainChatMessageHandler::handleMessage(const gloox::Message &stanza, gloox::MessageSession* session)
-{
-    if (
-        stanza.subtype() == gloox::Message::Chat ||
-        stanza.subtype() == gloox::Message::Normal
-    ) {
-        std::string DisplayMessage;
-        //~ DisplayMessage += stanza.from().username() + "@";
-        //~ DisplayMessage += stanza.from().server() + ": ";
-        DisplayMessage = stanza.from().bare() + ": ";
-        DisplayMessage += stanza.body() + "\n";
-
-        L_INFO("gnf", "Received message: " + DisplayMessage);
-
-        std::string Username = stanza.from().username();
-        if (Username == " ") {
-            Username = "Generic";
-        }
-
-        DisplayIncomingMessage(DisplayMessage, stanza.from().username());
-    } else {
-        L_INFO("gnf", "Message: " + stanza.body() + " will not be printed.");
-    }
 }
 
 /**

@@ -11,6 +11,7 @@
 #include "../includes/config.h" // The config header
 #include "../includes/interface.h" // The interface header
 #include "../includes/globals.h" // The global macros
+#include "../includes/utility.h" // The helper funcs
 
 #include <iostream>
 #include <ctime>
@@ -24,6 +25,10 @@
 #include <gloox/rostermanager.h>
 #include <gloox/disco.h>
 #include <gloox/discohandler.h>
+#include <gloox/messagesessionhandler.h>
+#include <gloox/chatstate.h>
+#include <gloox/chatstatehandler.h>
+#include <gloox/chatstatefilter.h>
 
 #ifndef GNF_H
 #define GNF_H
@@ -37,10 +42,22 @@ class ConnListener : public gloox::ConnectionListener
 
 };
 
-class MainChatMessageHandler : public gloox::MessageHandler
+class GnfMessageHandler : public gloox::MessageHandler
 {
     public:
     virtual void handleMessage(const gloox::Message &stanza, gloox::MessageSession* session = 0);
+};
+
+class GnfChatStateHandler : public gloox::ChatStateHandler
+{
+    public:
+    virtual void handleChatState(const gloox::JID &from, gloox::ChatStateType state);
+};
+
+class GnfMessageSessionHandler : public gloox::MessageSessionHandler
+{
+    public:
+    virtual void handleMessageSession(gloox::MessageSession* Session);
 };
 
 class FriendRoster : public gloox::RosterListener
