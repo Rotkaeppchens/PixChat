@@ -133,9 +133,8 @@ void DumpDomainLogLevel()
 
     for (unsigned int i = 0; i != gLogLevelDomainVec.size(); ++i) {
         gLogOutStrm <<
-            "\tDomainName: " << gLogLevelDomainVec[i]->LogDomain << std::endl <<
-            "\tLogLevel: " << std::to_string(gLogLevelDomainVec[i]->LogLevel) << std::endl <<
-            "\tBitmap: " << std::to_string(gLogLevelDomainVec[i]->Bitmap) << std::endl
+            "\tDomainName: " << gLogLevelDomainVec[i]->LogDomain <<
+            "\tLogLevel: " << std::to_string(gLogLevelDomainVec[i]->LogLevel)
             << std::endl
         ;
     }
