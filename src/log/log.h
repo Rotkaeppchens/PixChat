@@ -55,7 +55,7 @@ struct DomainLogLevel
  *
  * If it isnt declared default is INFO
  */
-const std::vector<std::string> gLogDomains = {"config", "log", "interface", "gnf", "friendroster"};
+const std::vector<std::string> gLogDomains = {"config", "log", "interface", "gnf", "friendroster", "gnfmessagesessionhandler"};
 /**
  * @brief The global var for the output file stream
  */
