@@ -39,7 +39,7 @@ SRC :=
 include $(patsubst %, %/module.mk, $(MODULES))
 
 # Include the dep file
--include $(DFILE)
+include $(DFILE)
 
 # Determining the obj files
 OBJ := $(patsubst %.cpp, $(TMP_O)/%.o, $(notdir $(filter %.cpp, $(SRC))))
