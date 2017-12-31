@@ -11,9 +11,9 @@ INC		:= $(shell fltk-config --use-images --includedir)
 ENV		:= ../env
 DIR 	:= $(ENV)/bin
 TMP		:= ../build
-TMP_O 	:= $(TMP)/o
-TMP_D 	:= $(TMP)/d
-DFILE	:= $(TMP_D)/project.d
+TMP_O 	:= $(TMP)/objects
+TMP_D 	:= $(TMP)/dependency
+DFILE	:= $(TMP_D)/dep.mk
 
 CC 		:= $(CACHE) g++ $(DEBUG) -c $(FLAGS)
 LD 		:= $(CACHE) g++ $(DEBUG)
