@@ -14,6 +14,8 @@
 #include <string>   // The string library
 #include <fstream>  // The file stream lib
 #include <map>      // The basic map type;
+#include <vector>	// The basic vector type
+#include "default_config.h" // The default config map
 
 /**
  * The file name of the config file.
@@ -24,5 +26,7 @@ std::string gConfigFileName;
  * The holding map in which we load the configurations
  */
 std::map<std::string, std::string> gConfigMap;
+
+std::map<std::string, std::string> GetDefaultConfigMap();
 
 #endif

@@ -25,6 +25,10 @@ bool LoadConfig(
     const std::string &ConfigDelimiter,
     const std::string &CommentChar
 ) {
+	// First we load the basic config with the default values.
+	gConfigMap = GetDefaultConfigMap();
+	
+	// Then we load the config file
     gConfigFileName = FileName;
 
     std::ifstream CfgIfStrm(gConfigFileName);
