@@ -14,6 +14,7 @@
 #include "../includes/log.h" // The log functions
 #include "../includes/config.h" // The config class
 #include "../includes/utility.h" // The helper functions
+#include "../includes/locale.h" // The locale system
 #include "../includes/interface.h" // The interface layer
 #include "../includes/gnf.h" // The gloox network functions
 #include <iostream> // The standard in/output
@@ -37,6 +38,12 @@ int ClientInit(int argc, char** argv)
     );
 
     LogInit(LOG_FILE_PATH);
+    
+    LocaleInit(
+		ReadConfigString("client.locale.path") + 
+		ReadConfigString("client.locale.file") +
+		ReadConfigString("client.locale.post")
+	);
 
     InterfaceInit();
 

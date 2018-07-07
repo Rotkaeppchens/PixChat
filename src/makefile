@@ -31,7 +31,7 @@ endif
 
 
 # The project modules
-MODULES := main config gnf includes interface log utility
+MODULES := main config gnf includes interface log utility locale
 
 SRC :=
 

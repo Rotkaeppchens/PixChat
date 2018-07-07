@@ -24,5 +24,10 @@ std::map<std::string, std::string> GetDefaultConfigMap()
 	// Possible values disabled, optional, required
 	DefaultConfigMap["client.tls.active"] = "required";
 	
+	// Locale File Options
+	DefaultConfigMap["client.locale.path"] = "../loc/";
+	DefaultConfigMap["client.locale.file"] = "en";
+	DefaultConfigMap["client.locale.post"] = ".loc";
+	
 	return DefaultConfigMap;
 }
