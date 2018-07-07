@@ -9,12 +9,13 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "../includes/utility.h" // The utility functions
+#include "../includes/config.h"     // The public header
+#include "../includes/utility.h"    // The utility functions
 #include <iostream> // The standard io stream
 #include <string>   // The string library
 #include <fstream>  // The file stream lib
 #include <map>      // The basic map type;
-#include <vector>	// The basic vector type
+#include <vector>   // The basic vector type
 #include "default_config.h" // The default config map
 
 /**

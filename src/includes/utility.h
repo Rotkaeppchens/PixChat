@@ -13,6 +13,7 @@
 #include <string>
 
 std::vector<std::string> StrSplitFirst(const std::string &Str, const std::string Delimiter);
+std::vector<std::string> StrSplit(const std::string &Str, const std::string &Delimiter);
 std::string StrTrim(std::string Str);
 std::string GetOsString();
 

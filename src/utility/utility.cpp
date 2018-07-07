@@ -49,6 +49,36 @@ std::vector<std::string> StrSplitFirst(const std::string &Str, const std::string
 }
 
 /**
+ * @brief Takes a string and a delimiter and splits the string on the delimiter
+ *
+ * If the the delimiter isnt in the string it returns a vector with the string as first part.
+ *
+ * @param Str The string to split.
+ * @param Delimiter The Delimiter to split on
+ * @return vector<string> The vector with the string parts
+ */
+std::vector<std::string> StrSplit(const std::string &Str, const std::string &Delimiter)
+{
+    std::vector<std::string> SplitVec;
+
+    std::string LastPart = Str;
+    std::size_t DelPos = 0;
+
+    while (
+        (DelPos = LastPart.find(Delimiter)) != std::string::npos
+    ) {
+        std::string Part = LastPart.substr(0, DelPos);
+        SplitVec.push_back(Part);
+
+        LastPart = LastPart.substr(DelPos + 1, LastPart.length());
+    }
+
+    SplitVec.push_back(LastPart);
+
+    return SplitVec;
+}
+
+/**
  * @brief Trims the given string
  *
  * Takes a string and and returns it without the leading/trailing spaces.

@@ -25,10 +25,10 @@ bool LoadConfig(
     const std::string &ConfigDelimiter,
     const std::string &CommentChar
 ) {
-	// First we load the basic config with the default values.
-	gConfigMap = GetDefaultConfigMap();
-	
-	// Then we load the config file
+    // First we load the basic config with the default values.
+    gConfigMap = GetDefaultConfigMap();
+
+    // Then we load the config file
     gConfigFileName = FileName;
 
     std::ifstream CfgIfStrm(gConfigFileName);
@@ -149,4 +149,53 @@ double ReadConfigDouble(const std::string &ConfigName)
     double ConfigValue = std::stod(ReadConfigString(ConfigName));
 
     return ConfigValue;
+}
+
+/**
+ * @brief Read and returns the value of the config as a ConfigInt3
+ *
+ * @param ConfigName The name of the config value
+ * @param Delimiter The delimiter to split on
+ * @return ConfigInt3 The config value
+ */
+ConfigInt3* ReadConfigInt3(const std::string &ConfigName, const std::string &Delimiter)
+{
+    std::string ConfigValue = ReadConfigString(ConfigName);
+
+    ConfigInt3 *ConfigStruct = new ConfigInt3();
+
+    std::vector<std::string> SplitVec = StrSplit(ConfigValue, Delimiter);
+
+    if (SplitVec.size() >= 3) {
+        ConfigStruct->a = std::stoi(SplitVec[0]);
+        ConfigStruct->b = std::stoi(SplitVec[1]);
+        ConfigStruct->c = std::stoi(SplitVec[2]);
+    }
+
+    return ConfigStruct;
+}
+
+/**
+ * @brief Read and returns the value of the config as a ConfigInt4
+ *
+ * @param ConfigName    The name of the config value
+ * @param Delimiter     The delimiter to split on
+ * @return ConfigInt4   The config value
+ */
+ConfigInt4* ReadConfigInt4(const std::string &ConfigName, const std::string &Delimiter)
+{
+    std::string ConfigValue = ReadConfigString(ConfigName);
+
+    ConfigInt4 *ConfigStruct = new ConfigInt4();
+
+    std::vector<std::string> SplitVec = StrSplit(ConfigValue, Delimiter);
+
+    if (SplitVec.size() >= 4) {
+        ConfigStruct->a = std::stoi(SplitVec[0]);
+        ConfigStruct->b = std::stoi(SplitVec[1]);
+        ConfigStruct->c = std::stoi(SplitVec[2]);
+        ConfigStruct->d = std::stoi(SplitVec[3]);
+    }
+
+    return ConfigStruct;
 }
