@@ -18,7 +18,7 @@ DFILE	:= $(TMP_D)/dep.mk
 CC 		:= $(CACHE) g++ $(DEBUG) -c $(FLAGS)
 LD 		:= $(CACHE) g++ $(DEBUG)
 RM 		:= rm
-MKDIR	:= mkdir
+MKDIR	:= mkdir -p -v
 DGEN	:= g++ -MM -MG
 
 DOXYCONF := doxy-conf
@@ -78,10 +78,14 @@ doxygen:
 	@echo Generating documentation ... && doxygen $(DOXYCONF)
 
 $(DFILE): $(SRC)
+ifeq ($(shell test -d $(TMP_D) && echo 1 || echo 0),1)
 	@echo Removing old dependency file...
 	@$(RM) -f $(DFILE)
 	@echo Generating dependency file $(DFILE) ...
 	@$(DGEN) $(filter %.cpp, $(SRC)) | sed -e "s@\(.*.o:\)@$(TMP_O)/\1@" >> $(DFILE)
+else
+	@echo Temp dir doesnt exist. Please execute make install_env.
+endif
 
 %.o:
 	@echo Building $@  ...
