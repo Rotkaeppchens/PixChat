@@ -1,0 +1,12 @@
+PixChat
+_______
+
+A simple Chatprogram that uses gloox / xmpp to communicate with other clients.
+
+Build:
+
+cd src
+make install_env
+make build
+
+Then you can switch in the env/bin folder to execute the program.
