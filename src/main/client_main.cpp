@@ -37,7 +37,10 @@ int ClientInit(int argc, char** argv)
         CONFIG_COMMENT_CHAR
     );
 
-    LogInit(LOG_FILE_PATH);
+    LogInit(
+		ReadConfigString("client.log.path") + 
+		ReadConfigString("client.log.file")
+	);
     
     LocaleInit(
 		ReadConfigString("client.locale.path") + 
@@ -68,7 +71,7 @@ int ClientMain(int argc, char** argv)
     L_INFO("default", "Starting main loop...");
 
     while (InterfaceCheck()) {
-        GnfUpdate(GLOOX_UPDATE_TIME);
+        GnfUpdate(ReadConfigInt("client.gloox.updatetime"));
     }
 
     return 0;

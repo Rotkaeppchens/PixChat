@@ -18,13 +18,18 @@ std::map<std::string, std::string> GetDefaultConfigMap()
 	// The default map
 	std::map<std::string, std::string> DefaultConfigMap;
 	
-	// The default log Level
+	// The log options
+	DefaultConfigMap["client.log.path"] = "../log/";
+	DefaultConfigMap["client.log.file"] = "general.log";
 	DefaultConfigMap["client.log.level.default"] = "INFO";
+	
+	// The time to wait for a timeout
+	DefaultConfigMap["client.gloox.updatetime"] = "10";
 	
 	// Possible values disabled, optional, required
 	DefaultConfigMap["client.tls.active"] = "required";
 	
-	// Locale File Options
+	// Locale File options
 	DefaultConfigMap["client.locale.path"] = "../loc/";
 	DefaultConfigMap["client.locale.file"] = "en";
 	DefaultConfigMap["client.locale.post"] = ".loc";
