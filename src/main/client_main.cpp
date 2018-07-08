@@ -38,15 +38,15 @@ int ClientInit(int argc, char** argv)
     );
 
     LogInit(
-		ReadConfigString("client.log.path") + 
-		ReadConfigString("client.log.file")
-	);
-    
+        ReadConfigString("client.log.path") +
+        ReadConfigString("client.log.file")
+    );
+
     LocaleInit(
-		ReadConfigString("client.locale.path") + 
-		ReadConfigString("client.locale.file") +
-		ReadConfigString("client.locale.post")
-	);
+        ReadConfigString("client.locale.path") +
+        ReadConfigString("client.locale.file") +
+        ReadConfigString("client.locale.post")
+    );
 
     InterfaceInit();
 
@@ -70,9 +70,12 @@ int ClientMain(int argc, char** argv)
 
     L_INFO("default", "Starting main loop...");
 
+    const int UpdateTime = ReadConfigInt("client.gloox.updatetime");
     while (InterfaceCheck()) {
-        GnfUpdate(ReadConfigInt("client.gloox.updatetime"));
+        GnfUpdate(UpdateTime);
     }
+
+    L_INFO("default", "Finished main loop, exiting...");
 
     return 0;
 }
