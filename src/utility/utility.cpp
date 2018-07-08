@@ -12,6 +12,7 @@
 #include <vector>       // The vector type
 #include <sstream>      // The string stream
 #include <cstring>      // The cstring lib
+#include <regex>        // The regex lib
 
 /**
  * @brief A function to split strings
@@ -83,14 +84,17 @@ std::vector<std::string> StrSplit(const std::string &Str, const std::string &Del
  *
  * Takes a string and and returns it without the leading/trailing spaces.
  *
- * @warning Function not functional.
- * :TODO: Implement function to trim strings.
- *
  * @param Str The string to trim
  * @return string The trimmed string.
  */
 std::string StrTrim(std::string Str)
 {
+    std::regex StrBeg("^\\s+");
+    std::regex StrEnd("\\s+$");
+
+    Str = std::regex_replace(Str, StrBeg, "");
+    Str = std::regex_replace(Str, StrEnd, "");
+
     return Str;
 }
 
