@@ -37,5 +37,9 @@ std::map<std::string, std::string> GetDefaultConfigMap()
     DefaultConfigMap["client.locale.bufferlength"] = "256";
     DefaultConfigMap["client.locale.keydelimiter"] = ":";
 
+    // Interface values
+    DefaultConfigMap["interface.color.delimiter"]   = ",";
+    DefaultConfigMap["interface.color.default"]     = "100,100,100";
+
     return DefaultConfigMap;
 }
