@@ -52,7 +52,10 @@ bool LoadConfig(
 
         std::vector<std::string> SplittedLine = StrSplitFirst(FileBuffer, ConfigDelimiter);
 
-        gConfigMap[SplittedLine[0]] = SplittedLine[1];
+        std::string Key = StrTrim(SplittedLine[0]);
+        std::string Value = StrTrim(SplittedLine[1]);
+
+        gConfigMap[Key] = Value;
     }
 
     CfgIfStrm.close();
@@ -151,51 +154,30 @@ double ReadConfigDouble(const std::string &ConfigName)
     return ConfigValue;
 }
 
-/**
- * @brief Read and returns the value of the config as a ConfigInt3
- *
- * @param ConfigName The name of the config value
- * @param Delimiter The delimiter to split on
- * @return ConfigInt3 The config value
- */
-ConfigInt3* ReadConfigInt3(const std::string &ConfigName, const std::string &Delimiter)
+std::vector<std::string> ReadConfigStringVec(const std::string &ConfigName, const std::string &Delimiter)
 {
     std::string ConfigValue = ReadConfigString(ConfigName);
 
-    ConfigInt3 *ConfigStruct = new ConfigInt3();
+    std::vector<std::string> StringVec;
 
-    std::vector<std::string> SplitVec = StrSplit(ConfigValue, Delimiter);
-
-    if (SplitVec.size() >= 3) {
-        ConfigStruct->a = std::stoi(SplitVec[0]);
-        ConfigStruct->b = std::stoi(SplitVec[1]);
-        ConfigStruct->c = std::stoi(SplitVec[2]);
+    if (ConfigValue != "") {
+        StringVec = StrSplit(ConfigValue, Delimiter);
     }
 
-    return ConfigStruct;
+    return StringVec;
 }
 
-/**
- * @brief Read and returns the value of the config as a ConfigInt4
- *
- * @param ConfigName    The name of the config value
- * @param Delimiter     The delimiter to split on
- * @return ConfigInt4   The config value
- */
-ConfigInt4* ReadConfigInt4(const std::string &ConfigName, const std::string &Delimiter)
+std::vector<int> ReadConfigIntVec(const std::string &ConfigName, const std::string &Delimiter)
 {
-    std::string ConfigValue = ReadConfigString(ConfigName);
+    std::vector<std::string> StringVec =  ReadConfigStringVec(ConfigName, Delimiter);
 
-    ConfigInt4 *ConfigStruct = new ConfigInt4();
+    std::vector<int> IntVec;
 
-    std::vector<std::string> SplitVec = StrSplit(ConfigValue, Delimiter);
-
-    if (SplitVec.size() >= 4) {
-        ConfigStruct->a = std::stoi(SplitVec[0]);
-        ConfigStruct->b = std::stoi(SplitVec[1]);
-        ConfigStruct->c = std::stoi(SplitVec[2]);
-        ConfigStruct->d = std::stoi(SplitVec[3]);
+    for (auto Iter = StringVec.begin(); Iter != StringVec.end(); ++Iter) {
+        if (*Iter != ""){
+            IntVec.push_back(std::stoi(*Iter));
+        }
     }
 
-    return ConfigStruct;
+    return IntVec;
 }
