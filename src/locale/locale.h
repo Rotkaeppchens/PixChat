@@ -15,4 +15,4 @@
 #include <vector>   // The default vector type
 #include <string>   // The default string type
 
-std::map<std::string, std::string> gLocaleMap;
+static std::map<std::string, std::string> gLocaleMap;

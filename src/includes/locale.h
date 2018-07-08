@@ -22,3 +22,4 @@ void LocaleInit(const std::string &FilePath);
 void DumpLocaleToLog();
 
 std::string GetLocaleString(const std::string &Key);
+const std::string *GetLocaleStringPtr(const std::string &Key);

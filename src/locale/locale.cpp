@@ -63,6 +63,33 @@ void LocaleInit(const std::string &FilePath)
 }
 
 /**
+ * @brief Returns a pointer to the locale string in the static map
+ *
+ * If the key is not found it returns a pointer to a new instance with the key
+ * as string.
+ *
+ * @param Key The Key to search for
+ * @return std::string*
+ */
+const std::string *GetLocaleStringPtr(const std::string &Key)
+{
+    auto Result = gLocaleMap.find(Key);
+
+    if (Result == gLocaleMap.end()) {
+        L_WARNING("locale", "Key: " + Key + " not found.");
+
+        std::string *FallbackStr = new std::string(Key);
+        return FallbackStr;
+    }
+
+    const std::string *Ptr = &Result->second;
+
+    L_DEBUG("locale", "Key: " + Key + " Value: " + *Ptr);
+
+    return Ptr;
+}
+
+/**
  * @brief Returns the locale string to the key
  *
  * @param Key The locale key
@@ -70,18 +97,9 @@ void LocaleInit(const std::string &FilePath)
  */
 std::string GetLocaleString(const std::string &Key)
 {
-    auto Result = gLocaleMap.find(Key);
+    const std::string *Value = GetLocaleStringPtr(Key);
 
-    if (Result == gLocaleMap.end()) {
-        L_WARNING("locale", "Key: " + Key + " not found.");
-        return Key;
-    }
-
-    std::string Value = Result->second;
-
-    L_DEBUG("locale", "Key: " + Key + " Value: " + Value);
-
-    return Value;
+    return *Value;
 }
 
 /**
