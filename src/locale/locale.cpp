@@ -42,7 +42,10 @@ void LocaleInit(const std::string &FilePath)
             continue;
         }
 
-        gLocaleMap[LineSplitted[0]] = LineSplitted[1];
+        std::string Key = StrTrim(LineSplitted[0]);
+        std::string Value = StrTrim(LineSplitted[1]);
+
+        gLocaleMap[Key] = Value;
     }
 
     // If the response is NULL it is the eof or an error
@@ -74,7 +77,11 @@ std::string GetLocaleString(const std::string &Key)
         return Key;
     }
 
-    return Result->second;
+    std::string Value = Result->second;
+
+    L_DEBUG("locale", "Key: " + Key + " Value: " + Value);
+
+    return Value;
 }
 
 /**
