@@ -12,8 +12,11 @@
 #include "../includes/interface.h"
 #include "../includes/log.h"
 #include "../includes/config.h"
+#include "../includes/locale.h"
 #include "../includes/gnf.h"
 #include "../includes/globals.h"
+
+#include "interface_structs.h"
 
 #include <algorithm>
 #include <vector>
@@ -37,14 +40,6 @@
 #include <FL/fl_ask.H>
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl_Select_Browser.H>
-
-struct InterfaceWidgetSize
-{
-    int x;
-    int y;
-    int w;
-    int h;
-};
 
 class InterfaceChatTab
 {
@@ -70,5 +65,13 @@ void SendCallbackMaster(Fl_Widget* Widget, void* Data);
  * friend_list.cpp
  */
 void CreateFriendListWindow(Fl_Widget*, void*);
+
+/**
+ * interface_utils.cpp
+ */
+InterfaceColor *ReadConfigColor(const std::string &Key);
+Fl_PNG_Image *GetPngImgResource(const std::string &ConfigKey);
+InterfaceSize *ReadConfigSize(const std::string &Key);
+InterfaceDimension *ReadConfigDimension(const std::string &ConfigKey);
 
 #endif
