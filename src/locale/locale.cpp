@@ -71,7 +71,7 @@ void LocaleInit(const std::string &FilePath)
  * @param Key The Key to search for
  * @return std::string*
  */
-const std::string *GetLocaleStringPtr(const std::string &Key)
+std::string *GetLocaleStringPtr(const std::string &Key)
 {
     auto Result = gLocaleMap.find(Key);
 
@@ -82,7 +82,7 @@ const std::string *GetLocaleStringPtr(const std::string &Key)
         return FallbackStr;
     }
 
-    const std::string *Ptr = &Result->second;
+    std::string *Ptr = &Result->second;
 
     L_DEBUG("locale", "Key: " + Key + " Value: " + *Ptr);
 
@@ -97,7 +97,7 @@ const std::string *GetLocaleStringPtr(const std::string &Key)
  */
 std::string GetLocaleString(const std::string &Key)
 {
-    const std::string *Value = GetLocaleStringPtr(Key);
+    std::string *Value = GetLocaleStringPtr(Key);
 
     return *Value;
 }
