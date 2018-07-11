@@ -74,4 +74,11 @@ Fl_PNG_Image *GetPngImgResource(const std::string &ConfigKey);
 InterfaceSize *ReadConfigSize(const std::string &Key);
 InterfaceDimension *ReadConfigDimension(const std::string &ConfigKey);
 
+/**
+ * interface.factory.cpp
+ */
+Fl_Window *FactNewWindow(const std::string &SizeKey, std::string *WindowTitle);
+Fl_Button *FactNewButton(const std::string &DimensionKey);
+Fl_Box *FactNewBox(const std::string &DimensionKey);
+
 #endif
