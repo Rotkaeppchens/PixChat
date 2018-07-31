@@ -11,10 +11,11 @@
 /**
  * Globals
  */
-Fl_Window* gMainWindow;
-Fl_Box* gInfoBox;
-Fl_Tabs* gChatTabWidget;
-std::vector<InterfaceChatTab*> gChatTabs;
+extern Fl_Window* gMainWindow;
+extern Fl_Box* gInfoBox;
+extern Fl_Tabs* gChatTabWidget;
+extern std::vector<InterfaceChatTab*> gChatTabs;
+extern Fl_Window* gFriendListWindow;
 
 /**
  * @brief This func quits the program

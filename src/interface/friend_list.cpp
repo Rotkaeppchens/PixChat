@@ -7,7 +7,8 @@
 
 #include "interface.h"
 
-Fl_Select_Browser* gFriendListBrowser;
+extern Fl_Window* gFriendListWindow;
+extern Fl_Select_Browser* gFriendListBrowser;
 
 /**
  * @brief The callback for the add friend button
@@ -222,6 +223,7 @@ void CreateFriendListWindow(Fl_Widget*, void*)
     FriendListBrowser->textsize(15);
     FriendListBrowser->box(FL_BORDER_BOX);
 
+    gFriendListWindow = FriendListWindow;
     gFriendListBrowser = FriendListBrowser;
 
     InterfaceRefreshFriendListDisplay();
