@@ -63,24 +63,27 @@ void NewChatWindowCallback(Fl_Widget* Widget, void* Data)
 
 void NewChatCallback(Fl_Widget* Widget, void* Data)
 {
-    Fl_Window* NewChatWindow = new Fl_Window(300, 130, "New Chat");
+    Fl_Window* NewChatWindow = FactNewWindow(
+        "interface.newchat.window.size",
+        GetLocaleStringPtr("newchat.windowtitle")
+    );
 
-    Fl_Box* LabelBox = new Fl_Box(10, 10, 280, 30, "Please enter the name:");
+    Fl_Box* LabelBox = FactNewBox("interface.newchat.label.dimension");
+    LabelBox->copy_label(GetLocaleStringPtr("newchat.question")->c_str());
     LabelBox->box(FL_NO_BOX);
 
     Fl_Input* NameInput = new Fl_Input(10, 50, 280, 30);
     NameInput = NameInput;
 
-    Fl_Button* NewChatButton = new Fl_Button(10, 90, 50, 30, "Ok");
+    Fl_Button* NewChatButton = FactNewButton("interface.newchat.button.dimension");
     NewChatButton->box(FL_BORDER_BOX);
+    NewChatButton->copy_label(GetLocaleStringPtr("button.ok")->c_str());
     NewChatButton->shortcut(FL_Enter);
     NewChatButton->callback((Fl_Callback*)NewChatWindowCallback, NameInput);
 
     NewChatWindow->end();
     NewChatWindow->show();
 }
-
-
 
 void ConnectCallback(Fl_Widget* Widget, void* Data)
 {
@@ -126,23 +129,39 @@ int InterfaceInit()
     L_INFO("interface", "Started interface init...");
 
     L_INFO("interface", "Setting base client colors...");
-    Fl::background(50, 50, 50);
-    Fl::background2(70, 70, 70);
-    Fl::foreground(255, 255, 255);
+    InterfaceColor *ColorBackground = ReadConfigColor("interface.color.background");
+    InterfaceColor *ColorBackground2 = ReadConfigColor("interface.color.background2");
+    InterfaceColor *ColorForeground = ReadConfigColor("interface.color.foreground");
+
+    Fl::background(
+        ColorBackground->r,
+        ColorBackground->g,
+        ColorBackground->b
+    );
+    Fl::background2(
+        ColorBackground2->r,
+        ColorBackground2->g,
+        ColorBackground2->b
+    );
+    Fl::foreground(
+        ColorForeground->r,
+        ColorForeground->g,
+        ColorForeground->b
+    );
 
     L_DEBUG("interface", "Creating base window...");
     std::string WindowTitle(PROJECT_NAME);
     WindowTitle += " Ver.: ";
     WindowTitle += PROJECT_VERSION_NR;
 
-    Fl_Window* MainWindow = new Fl_Window(800, 560, WindowTitle.c_str());
+    Fl_Window* MainWindow = FactNewWindow("interface.mainwindow.size", &WindowTitle);
     //~ MainWindow->resizable(MainWindow);
 
-    Fl_PNG_Image* MainWindowIcon = new Fl_PNG_Image("../res/icon.png");
+    Fl_PNG_Image* MainWindowIcon = GetPngImgResource("interface.mainwindow.icon");
     MainWindow->icon(MainWindowIcon);
 
     L_DEBUG("interface", "Setting message window hotspot.");
-    fl_message_hotspot(0);
+    fl_message_hotspot(ReadConfigInt("interface.message.hotspot"));
 
     L_DEBUG("interface", "Creating menu bar...");
     Fl_Menu_Item MenuItems[] = {

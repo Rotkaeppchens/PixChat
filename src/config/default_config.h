@@ -40,6 +40,27 @@ std::map<std::string, std::string> GetDefaultConfigMap()
     // Interface values
     DefaultConfigMap["interface.color.delimiter"]   = ",";
     DefaultConfigMap["interface.color.default"]     = "100,100,100";
+    DefaultConfigMap["interface.color.background"]  = "50,50,50";
+    DefaultConfigMap["interface.color.background2"] = "70,70,70";
+    DefaultConfigMap["interface.color.foreground"]  = "255,255,255";
+
+    DefaultConfigMap["interface.size.delimiter"] = ",";
+
+    DefaultConfigMap["interface.message.hotspot"] = "0";
+
+    DefaultConfigMap["interface.resource.path"] = "../res/";
+
+    DefaultConfigMap["interface.mainwindow.size"] = "800,560";
+    DefaultConfigMap["interface.mainwindow.icon"] = "icon.png";
+
+    DefaultConfigMap["interface.newchat.window.size"]       = "300,130";
+    DefaultConfigMap["interface.newchat.label.dimension"]   = "10,10,280,30";
+    DefaultConfigMap["interface.newchat.button.dimension"]  = "10,90,50,30";
+
+    DefaultConfigMap["interface.options.size"] = "300,130";
+    DefaultConfigMap["interface.options.header.dimension"] = "10,10,280,30";
+    DefaultConfigMap["interface.options.defaultbutton.dimension"] = "10,50,280,30";
+    DefaultConfigMap["interface.options.colorbackground.dimension"] = "10,90,280,30";
 
     return DefaultConfigMap;
 }
