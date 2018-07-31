@@ -2,7 +2,7 @@ PROJECT := PixChat
 
 TARGET 	:= $(PROJECT)
 
-DEBUG 	:=
+DEBUG 	:= -ggdb
 CACHE	:= ccache
 FLAGS 	:= -Wall -std=c++0x $(shell fltk-config --use-images --cxxflags) $(shell gloox-config --cxxflags)
 LIB 	:= $(shell fltk-config --use-images --ldflags) $(shell gloox-config --libs)
