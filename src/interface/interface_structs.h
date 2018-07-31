@@ -9,11 +9,26 @@
 #ifndef INTERFACE_STRUCTS_H
 #define INTERFACE_STRUCTS_H
 
+#include <string>
+
 struct InterfaceColor
 {
-    int r;
-    int g;
-    int b;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+
+    std::string Dump()
+    {
+        std::string DumpStr;
+        DumpStr += "r: ";
+        DumpStr += std::to_string(this->r);
+        DumpStr += " g: ";
+        DumpStr += std::to_string(this->g);
+        DumpStr += " b: ";
+        DumpStr += std::to_string(this->b);
+
+        return DumpStr;
+    }
 };
 
 struct InterfaceSize
