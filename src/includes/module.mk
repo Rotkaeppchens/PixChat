@@ -8,4 +8,5 @@ SRC += \
 	includes/locale.h \
 	includes/log.h \
 	includes/stacktrace.h \
+	includes/test.h \
 	includes/utility.h
