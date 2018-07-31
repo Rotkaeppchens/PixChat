@@ -40,7 +40,11 @@
 #include <FL/fl_ask.H>
 #include <FL/Fl_PNG_Image.H>
 #include <FL/Fl_Select_Browser.H>
+#include <FL/Fl_Color_Chooser.H>
 
+/**
+ * Classes
+ */
 class InterfaceChatTab
 {
     public:
@@ -80,5 +84,10 @@ InterfaceDimension *ReadConfigDimension(const std::string &ConfigKey);
 Fl_Window *FactNewWindow(const std::string &SizeKey, std::string *WindowTitle);
 Fl_Button *FactNewButton(const std::string &DimensionKey);
 Fl_Box *FactNewBox(const std::string &DimensionKey);
+
+/**
+ * interface_options.cpp
+ */
+void CreateOptionsWindow();
 
 #endif

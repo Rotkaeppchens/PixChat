@@ -85,11 +85,6 @@ void FavoritesCallback(Fl_Widget* Widget, void* Data)
     fl_message("Favorites Callback");
 }
 
-void OptionsCallback(Fl_Widget* Widget, void* Data)
-{
-    fl_message("Options Callback");
-}
-
 void AboutCallback(Fl_Widget* Widget, void* Data)
 {
     std::string AboutMessage;
@@ -154,7 +149,7 @@ int InterfaceInit()
             {"New Chat", 0, (Fl_Callback*)NewChatCallback},
             {0},
         {"Extra", 0, 0, 0, FL_SUBMENU},
-            {"Options", 0, (Fl_Callback*)OptionsCallback},
+            {"Options", 0, (Fl_Callback*)CreateOptionsWindow},
             {"About", 0, (Fl_Callback*)AboutCallback},
             {0},
         {0}

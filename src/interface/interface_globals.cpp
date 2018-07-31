@@ -13,6 +13,7 @@
  */
 Fl_Window* gMainWindow;
 Fl_Window* gFriendListWindow;
+Fl_Window* gOptionsWindow;
 
 /**
  * Widgets
