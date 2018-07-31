@@ -24,7 +24,14 @@ extern Fl_Window* gFriendListWindow;
  */
 void QuitProgram()
 {
-    exit(0);
+    if (gMainWindow != nullptr) {
+        L_DEBUG("interface", "Hiding main window.");
+        gMainWindow->hide();
+    }
+    if (gFriendListWindow != nullptr) {
+        L_DEBUG("interface", "Hiding friend list window.");
+        gFriendListWindow->hide();
+    }
 }
 
 void SendCallbackMaster(Fl_Widget* Widget, void* Data)
